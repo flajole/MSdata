@@ -1,0 +1,50 @@
+setGeneric("DataTransform", 
+           function(msdata, ...) standardGeneric("DataTransform"))
+		   
+#' Data transformation
+#'
+#' @param msdata MSdata-class object
+#' @param method The method of transformation, one of:\cr
+#' \code{"log10"} - log10-transformation; \cr
+#' \code{"log2"} - log2-transformation;\cr
+#' \code{"glog10"} - generalised log10, tolerant to zeros (zeros are replaced with 1/10 of the minimal value);\cr
+#' \code{"glog2"} - generalised log2, tolerant to zeros (zeros are replaced with 1/10 of the minimal value); \cr
+#' \code{"cuberoot"} - cube root transformation \cr
+#' 
+#' @return MSdata-class object with transformed intensity matrix
+#' @export 		   
+setMethod("DataTransform", "MSdata",
+          function(msdata, method = "glog10")) {
+    match.arg(method, c("glog10", "glog2", "log10", "log2", "cuberoot"))
+    .int.Matrix <- intMatrix(msdata)
+    min.val <- min(abs(.intMatrix[.intMatrix!=0]))/10;
+    if (method == "log10"){
+        .intMatrix <- apply(.intMatrix, 1, log10)
+        methodlog <- "Common Logarithm Transformation"
+    } else if (method == "log2") {
+        .intMatrix <- apply(.intMatrix, 1, log2)
+        methodlog <- "Binary Logarithm Transformation"
+    } else if (method == "glog10") {
+        .intMatrix <- apply(.intMatrix, 1, glog10, min.val)
+        methodlog <- "Generalised Common Logarithm Transformation"
+    } else if (method == "glog2") {
+        .intMatrix <- apply(.intMatrix, 1, glog2, min.val)
+        methodlog <- "Generalised Binary Logarithm Transformation"
+    } else if (method == "cuberroot") {
+        .intMatrix <- .intMatrix^1/3
+        methodlog <- "Cube Root Transformation"
+    }
+    .processLog <- paste0(.processLog, "Data are transformed by ", methodlog, "\n")
+    MSdata(intMatrix  = .intMatrix,
+           peakData   = peakData(msdata),
+           sampleData = sampleData(msdata),
+           processLog = .processLog)
+}
+
+glog2 <- function(x, min.val){
+    log10((x + sqrt(x^2 + min.val^2))/2)
+}
+
+glog10 <- function(x, min.val){
+    log2((x + sqrt(x^2 + min.val^2))/2)
+}
