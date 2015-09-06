@@ -14,32 +14,34 @@
 #' @param directory  path to the directory containing .csv QI output files.
 #' All the files in all subdirectories are proceeded too.
 #' Remember that in file paths you should use either "/" or "\\", not just "\".
-#' @param abundance if \code{"Normalised"}, then normalised data are used; if \code{"Raw"}, then raw data are used
-#' @param facNames character vector of grouping factor names.
+#' @param abundance If \code{"Normalised"}, then normalised data are used; if \code{"Raw"}, then raw data are used
+#' @param facNames Character vector of grouping factor names.
+#' @param compoundID The name of the column in QI output table used as the set of compound IDs.
+#' For \code{MQI_to_MA} one of: \code{"Compound"}, \code{"Accepted Compound ID"}, \code{"Formula"}.\cr
+#' For \code{PQI_to_MA} one of: \code{"Accession"}, \code{"Description"}, \code{"shortDescription"}.\cr
+#' \code{"shortDescription"} means that the data from "Description" column are used, 
+#' but they are cut starting with "OS=".
 #'
 #' @example
 #' PQI_to_MA("//mpimp-golm/user/Homes/Zubkov/QI_data")
 #' PQI_to_MA("\\\\mpimp-golm\\user\\Homes\\Zubkov\\QI_data")
-#' PQI_to_MA("C:/QI_data", abundance = "Raw", proteinID = "Accession")
+#' PQI_to_MA("C:/QI_data", abundance = "Raw", compoundID = "Accession")
 #' MQI_to_MA("C:/QI_data", facNames = c("Phenotype", "Treatment", "Time"), unite_neg_pos = FALSE)
 #' @name QI_to_MA
 NULL
 
 #' \code{PQI_to_MA} converts protein QI data output
-#' @param proteinID if \code{"shortDescription"}, then the data from description column cutted starting with "OS=" are used;
-#' if \code{"Description"}, then the data from description column are used;
-#' if \code{"Accession"}, then the data from accession column
 #' @rdname QI_to_MA
 #' @export
 PQI_to_MA <- function(directory = getwd(),
                       abundance = "Normalised",
 					  facNames  = NULL,
-                      proteinID = "shortDescription") {
+                      compoundID = "shortDescription") {
     oldwd <- getwd()
     on.exit(setwd(oldwd))    
     setwd(directory)
     match.arg(abundance, c("Normalised", "Raw"))
-    match.arg(proteinID, c("Accession", "Description", "shortDescription"))
+    match.arg(compoundID, c("Accession", "Description", "shortDescription"))
     
     rawfiles <- list.files(pattern = ".csv", full.names = TRUE, include.dirs = TRUE)
     
@@ -47,7 +49,7 @@ PQI_to_MA <- function(directory = getwd(),
         in.tab <- read.csv(rawfiles[j], stringsAsFactors = FALSE, header = FALSE)
         tab <- in.tab
         
-        if (proteinID == "Accession") {
+        if (compoundID == "Accession") {
             idcmpd <- pmatch("Acces", tab[3, ])
         } else {
             idcmpd <- pmatch("Descr", tab[3, ])
@@ -70,7 +72,7 @@ PQI_to_MA <- function(directory = getwd(),
             tab <- tab[c(idcmpd, rawstart:(specstart - 1))]
         }
         
-        if (proteinID == "shortDescription") {
+        if (compoundID == "shortDescription") {
             for (i in 4:nrow(tab)) tab[i,1] <- strsplit(tab[i,1], " OS=")[[1]][1]
         }
         

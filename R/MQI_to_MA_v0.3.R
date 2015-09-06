@@ -6,6 +6,7 @@
 
 MQI_to_MA <- function(directory = getwd(),
                       abundance = "Normalised",
+					  compoundID = "Accepted Compound"
                       facNames = NULL,
                       unite_neg_pos = TRUE) {
     oldwd <- getwd()
