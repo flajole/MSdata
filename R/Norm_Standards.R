@@ -7,13 +7,14 @@ setGeneric("StandNorm",
 		   
 #' Normalisation by the list internal standards
 #'
-#' Normalisation by the list of external or internal standards
-#' @param msdata MSdata-class object
+#' Normalisation by the list of external or internal standards. 
+#' In each sample all the intensities are divided by sum of standards intensities.
+#' @param msdata \code{\link{MSdata-class}} object
 #' @param standards.list The link to the file with the table of standards looking like: name, mz, retention time
-#' @param meanInt Mean sum intensity of all the standards (from previous experiments).
-#' @param recalculateMean If \code{TRUE} \{meanInt} is not used but recalculated from this particular dataset.
+#' @param meanInt Mean sum intensity of all the standards (ususally, from previous experiments).
+#' @param recalculateMean If \code{TRUE} \{meanInt} is not used, but is recalculated from this particular data.
 #' 
-#' @return MSdata-class object with normalised intensity matrix
+#' @return \code{\link{MSdata-class}} object with normalised intensity matrix
 #' @export 		   		   
 
 setMethod("StandNorm", "MSdata",

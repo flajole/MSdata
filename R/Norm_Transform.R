@@ -3,7 +3,8 @@ setGeneric("DataTransform",
 		   
 #' Data transformation
 #'
-#' @param msdata MSdata-class object
+#' Logarithmical or cube root data transformation.
+#' @param msdata \code{\link{MSdata-class}} object
 #' @param method The method of transformation, one of:\cr
 #' \code{"log10"} - log10-transformation; \cr
 #' \code{"log2"} - log2-transformation;\cr
@@ -11,7 +12,7 @@ setGeneric("DataTransform",
 #' \code{"glog2"} - generalised log2, tolerant to zeros (zeros are replaced with 1/10 of the minimal value); \cr
 #' \code{"cuberoot"} - cube root transformation \cr
 #' 
-#' @return MSdata-class object with transformed intensity matrix
+#' @return \code{\link{MSdata-class}} object with transformed intensity matrix
 #' @export 		   
 setMethod("DataTransform", "MSdata",
           function(msdata, method = "glog10")) {

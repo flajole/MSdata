@@ -3,12 +3,19 @@ setGeneric("DataScaling",
 
 #' Data scaling
 #'
-#' @param msdata MSdata-class object
+#' This function realizes two steps: mean-centring and scaling.
+#' Mean-centring means that - for each feature (peak/compound) all samples intensities are considered 
+#' as differences from the mean intensity of this feature.
+#' Scaling means that these differences are standardized for all the features by dividing by 
+#' standard deviation, or range, or another measure of variance. 
+#' Therefore, after scaling all the features have mean intensity 0 and corresponding variance measure 1.
+#'
+#' @param msdata \code{\link{MSdata-class}} object
 #' @param method The method of scaling, one of:\cr
-#' \code{"auto"} - Autoscaling, mean-centering and dividing by the standard deviation of each variable;\cr
-#' \code{"pareto"} - Pareto scaling, mean-centering and dividing by the square root of standard deviation of each variable; \cr
-#' \code{"range"} - Range scaling, mean-centering and dividing by the range of each variable 
-#' @return MSdata-class object with normalised intensity matrix
+#' \code{"auto"} - Autoscaling, mean-centring and dividing by the standard deviation of each variable;\cr
+#' \code{"pareto"} - Pareto scaling, mean-centring and dividing by the square root of standard deviation of each variable; \cr
+#' \code{"range"} - Range scaling, mean-centring and dividing by the range of each variable 
+#' @return \code{\link{MSdata-class}} object with normalised intensity matrix
 #' @export 
 
 setMethod("DataScaling", "MSdata",
@@ -24,7 +31,8 @@ setMethod("DataScaling", "MSdata",
     } else if (method == "range") {
         .intMatrix <- apply(.int.Matrix, 1, RangeNorm)
     }
-    
+    rownames(.intMatrix) <- rownames(intMatrix(msdata))
+	colnames(.intMatrix) <- colnames(intMatrix(msdata))
     
     .processLog <- paste0(.processLog, "Data are rescaled by ", method, " scaling\n")
     MSdata(intMatrix  = .intMatrix,
@@ -52,27 +60,4 @@ RangeNorm <- function(x){
     }else{
         (x - mean(x))/(max(x)-min(x));
     }
-}
-
-# normalize by a sum of each sample, assume constant sum (1000)
-# return: normalized data
-SumNorm<-function(x){
-    1000*x/sum(x, na.rm=T);
-}
-
-# normalize by median
-MedianNorm<-function(x){
-    x/median(x, na.rm=T);
-}
-
-# normalize by a reference sample (probability quotient normalization)
-# ref should be the name of the reference sample
-ProbNorm<-function(x, ref.smpl){
-    x/median(as.numeric(x/ref.smpl), na.rm=T)
-}
-
-# normalize by a reference reference (i.e. creatinine)
-# ref should be the name of the cmpd
-CompNorm <- function(x, ref){
-    1000*x/x[ref];
 }
