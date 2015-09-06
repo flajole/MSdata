@@ -20,7 +20,7 @@ setGeneric("StandNorm",
 setMethod("StandNorm", "MSdata",
           function(msdata, standards.list, meanInt = 2000, recalculateMean = FALSE) {
               #load standards list, convert into seconds if necessary
-              standards.table <- read.table(standards.list, sep="\t", col.names = c("chemical", "mz","rt"))
+              standards.table <- read.table(standards.list, col.names = c("chemical", "mz","rt"))
               if (all(standards.table[,"rt"] < 60)) standards.table[,"rt"] <- standards.table[,"rt"]*60
               
               standards <- c()

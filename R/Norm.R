@@ -26,7 +26,7 @@ setMethod("Norm", "MSdata",
                   if (is.null(biomass.list)) 
                       stop("Method is set to normalisation by biomass, 
                            but biomasses list is not selected!")
-                  biomass.table <- suppressWarnings(read.table(biomass.list, sep="\t", row.names = 1, col.names = c("Biomass")))
+                  biomass.table <- suppressWarnings(read.table(biomass.list, row.names = 1, col.names = c("Biomass")))
 				  
 				  miss.samples <- setdiff(colnames(.intMatrix), rownames(biomass.table))  
 				  if (length(miss.samples) > 0))

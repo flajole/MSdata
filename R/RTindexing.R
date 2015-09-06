@@ -27,7 +27,7 @@ setMethod("RTindexing", "MSdata",
                    rt.window   = 30) {
               peak.rt <- object@peakData[, "RT"]
               peak.mz <- object@peakData[, "MZ"]
-              targets <- read.table(targets.list, sep = "\t", col.names = c("compound", "mz", "rt"))
+              targets <- read.table(targets.list, col.names = c("compound", "mz", "rt"))
               if (all(targets[, "rt"] < 60)) targets[, "rt"] <- targets[, "rt"] * 60
               ntrg <- dim(targets)[1]
               for (i in 1:ntrg) {
