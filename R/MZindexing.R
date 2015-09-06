@@ -1,6 +1,26 @@
 setGeneric("MZindexing", 
            function(object, ...) standardGeneric("MZindexing"))
 
+#' Mass-charge indexing
+#'
+#' Perform mass-charge correction in \code{\link{MSdata-class}} object.
+#' Function takes a given list of internal standards, corresponding peaks are found 
+#' in data set and basing on their M/Z shift the shifts for the rest of peaks
+#' are calculated. The resulting data set is realigned.\cr\cr
+#' It's better to perform MZ indexing after \code{\link{RTindexing}}.
+#'
+#' @param object \code{\link{MSdata-class}} object. 
+#' For correct processing there should be "RT" and "MZ" columns in peak data (\code{peakData(object)})
+#' @param targets.list File path to simple table of the internal standards. 
+#' Table should have three columns: compoundID, mass-charge and retention time (with or without header).
+#' @param mz.window Peak corresponding to standard compound is searched in this range 
+#' of MZs around standard MZ value.
+#' @param rt.window Peak corresponding to standard compound is searched in this range 
+#' of RTs around standard RT value.
+#'
+#' @return \code{\link{MSdata-class}} object with recalculated MZ values in peak data
+#' @seealso \code{\link{RTindexing}}
+#' @export
 setMethod("MZindexing", "MSdata",
           function(object, 
                    targets.list, 
