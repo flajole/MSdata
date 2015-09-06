@@ -171,7 +171,7 @@ setMethod("MSupload", "list",
                   
               }
               
-              #.sampleData$ReplicateGroup <- RepGroup(.sampleData)
+              .sampleData$ReplicateGroup <- RepGroup(.sampleData)
               .processLog <- paste0("Data uploaded from the files:\n", 
                                     object$intFile, " - intensity matrix\n",
                                     object$sampleFile, " - sample metadata\n",
@@ -186,15 +186,15 @@ setMethod("MSupload", "list",
 
 
 RepGroup <- function(sampleData, impFact = names(sampleData)) {
-    misFact <- setdiff(impFact, names(sampleData))
-    if (length(misFact) != 0) {
+    missFact <- setdiff(impFact, names(sampleData))
+    if (length(missFact) != 0) {
         impFact <- impFact[!(impFact %in% misFact)]
         warning ("Not all important factors are found in sample meta-data.
                  Missing factors are excluded.")
-    } 
+    }
     combFact <- expand.grid(sapply(impFact, 
-                                   function(x) levels(as.factor(ex@sampleData[[x]]))))
-    repGroup <- apply(sampleData[,impFact], 1, 
+                                   function(x) levels(as.factor(sampleData[[x]]))))
+    repGroup <- apply(sampleData[,impFact], 1,
                       function(x) which(apply(combFact, 1, 
                                               function(y) all(x == y))))
     repGroup <- as.factor(repGroup)
