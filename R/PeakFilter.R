@@ -38,7 +38,6 @@ setMethod("PeakFilter", "MSdata",
 				   min.nonNApercent = 0.4){
            
               peaks <- msdata@intMatrix
-              reps  <- msdata@sampleData[-blanks, ]$ReplicationGroup
               filt  <- array(dim = c(length(levels(reps)), dim(peaks)[1], 0))
               
               se <- function(x) sqrt(var(x, na.rm = TRUE)/length(na.omit(x)))
@@ -55,6 +54,9 @@ setMethod("PeakFilter", "MSdata",
 			  if (!is.null(blanks)) {
 					blankpeaks <- peaks[ , blank]
 					peaks <- peaks[ , -blank]
+					reps  <- msdata@sampleData[-blanks, ]$ReplicationGroup
+			  } else {
+					reps  <- msdata@sampleData$ReplicationGroup
 			  }
 			  
               if (is.null(blanks) & (!is.null(fold.blank) | !is.null(above.blank))) {
