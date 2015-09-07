@@ -1,13 +1,14 @@
 #' Upload MSdata 
 #' 
 #' Create a \code{\link{MSdata-class}} object from external data tables.
-#'
+#' Automatically adds a \code{ReplicationGroup} column in \code{sampleData} table according to group factors combinations.
 #' @param object One of: 
 #' \enumerate{
 #' \item a character vector of length 1 - just a file path name of one .csv or .txt data frame.\cr
 #' \item a list of paths to three files: matrix of intensities, sample metadata and peak metadata.
 #' }
 #' @param orientation Orientation of table, one of \code{"SamplesInCol"} or \code{"SamplesInRow"}
+#' @return \code{\link{MSdata-class}} object
 #' @name MSupload
 
 setGeneric("MSupload", 
@@ -67,8 +68,8 @@ setMethod("MSupload", "character",
               rownames(.intMatrix) <- rownames(.peakData)
               colnames(.intMatrix) <- rownames(.sampleData)
               
-              #.sampleData$ReplicateGroup <- RepGroup(.sampleData)
-              .processLog <- paste0("Data uploaded from the file:\n", o)
+              .sampleData$ReplicateGroup <- RepGroup(.sampleData)
+              .processLog <- paste0("Data uploaded from the file:\n", object, "\n\n")
               MSdata(intMatrix  = .intMatrix,
                      peakData   = .peakData,
                      sampleData = .sampleData,
@@ -144,7 +145,7 @@ setMethod("MSupload", "list",
               .processLog <- paste0("Data uploaded from the files:\n", 
                                     object$intFile, " - intensity matrix\n",
                                     object$sampleFile, " - sample metadata\n",
-                                    object$peakFile, " - peak metadata\n")
+                                    object$peakFile, " - peak metadata\n\n")
               MSdata(intMatrix  = .intMatrix,
                      peakData   = .peakData,
                      sampleData = .sampleData,
