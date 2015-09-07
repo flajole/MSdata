@@ -4,7 +4,7 @@
 setGeneric("StandNorm", 
            function(msdata, ...) standardGeneric("StandNorm"))
 		  
-		   
+
 #' Normalisation by the list internal standards
 #'
 #' Normalisation by the list of external or internal standards. 
@@ -15,6 +15,7 @@ setGeneric("StandNorm",
 #' @param recalculateMean If \code{TRUE} then \code{meanInt} is not used, but is recalculated from these particular data.
 #' 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
+#' @name StandNorm
 #' @export 		   		   
 
 setMethod("StandNorm", "MSdata",

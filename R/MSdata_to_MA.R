@@ -1,7 +1,5 @@
 setGeneric("MSdata_to_MA", 
            function(msdata, ...) standardGeneric("MSdata_to_MA"))
-
-
 #' Convert MSdata object to MetaboAnalyst object
 #' 
 #' Create an object for storing data for processing in MetaboAnalysis (\code{MApckg}).
@@ -11,9 +9,8 @@ setGeneric("MSdata_to_MA",
 #' In the first case one of the arguments \code{facA} or \code{facB} have to be equal \code{"Time"}
 #' @param facA Grouping factor, one of the names of sample data columns in \code{msdata@@sampleData} 
 #' @param facB Optional second factor.
-#' 
+#' @name MSdata_to_MA
 #' @export
-
 setMethod("MSdata_to_MA", "MSdata",
           function (msdata, 
                     designType = "regular", 

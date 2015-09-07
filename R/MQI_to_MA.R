@@ -1,5 +1,39 @@
+#' Convert QI to MetaboAnalyst
+#'
+#' Function for converting QI output .csv files into format convenient for further analysis with MetaboAnalyst.
+#' For proper work, please, make complete QI output files with all the options marked.\cr
+#' This function:
+#' \enumerate{
+#'   \item Cuts out all the extra data, leaving only columns with abundance values 
+#' (either raw or normalised) and a column with compound's IDs.
+#'   \item Moves chosen compound ID column to the first position.
+#'   \item Expands sample group labels.
+#'   \item Separate group labels into grouping factors and creates rows with factors.
+#'   \item (for \code{MQI_to_MA}) Merges neg and pos files with matching names.
+#'   \item Writes the resulting table into new .csv file.
+#' }
+#' 
+#' @param directory  Path to the directory containing .csv QI output files.
+#' All the files in all subdirectories are proceeded too.
+#' Remember that in file paths you should use either "/" or double "\", not just "\".
+#' @param abundance If \code{"Normalised"}, then normalised data are used; if \code{"Raw"}, then raw data are used
+#' @param facNames Character vector of grouping factor names.
+#' @param compoundID The name of the column in QI output table used as the set of compound IDs.\cr
+#' For \code{MQI_to_MA} one of: \code{"Compound"}, \code{"Accepted Compound ID"}, \code{"Formula"}.\cr
+#' For \code{PQI_to_MA} one of: \code{"Accession"}, \code{"Description"}, \code{"shortDescription"}.\cr
+#' \code{"shortDescription"} means that the data from "Description" column are used, 
+#' but they are cut starting with "OS=".
+#'
+#' @examples
+#' PQI_to_MA("//mpimp-golm/user/Homes/Zubkov/QI_data")
+#' PQI_to_MA("\\\\mpimp-golm\\user\\Homes\\Zubkov\\QI_data")
+#' PQI_to_MA("C:/QI_data", abundance = "Raw", compoundID = "Accession")
+#' MQI_to_MA("C:/QI_data", facNames = c("Phenotype", "Treatment", "Time"), unite_neg_pos = FALSE)
+#' @name QI_to_MA
+NULL
+
 #' \code{MQI_to_MA} converts lipid and metabolite QI data output
-#' @param unite_neg_pos if \code{TRUE}, creates combined file from pos and neg file pairs with matching names;
+#' @param unite_neg_pos If \code{TRUE}, creates combined file from pos and neg file pairs with matching names;
 #' if \code{FALSE}, just skips this step
 #' @rdname QI_to_MA
 #' @export

@@ -21,10 +21,12 @@ setGeneric("PeakFilter",
 #' 
 #' @param min.int Filter peaks by total intensity. Mean peak intensity in replicate group 
 #' have to be higher than \code{min.int} value.
-#' @param min.number.repgroup Filter peaks with too many missing values. \code{min.number.repgroup} 
+#' @param min.nonNAnum.repgroup Filter peaks with too many missing values. \code{min.number.repgroup} 
 #' is minimal number of non-NA values in replicate group.
-#'
+#' @param min.nonNAallgroups Filter peaks with too many missing values. \code{min.allgroups} 
+#' is minimal allowed quotient of non-NA values for each peak.
 #' @return \code{\link{MSdata-class}} object without filtered peaks and blank samples
+#' @name PeakFilter
 #' @export
 
 setMethod("PeakFilter", "MSdata",
@@ -32,9 +34,9 @@ setMethod("PeakFilter", "MSdata",
                    blanks = NULL, 
                    above.blank = 2,
                    min.int = 1000,
-                   min.number.repgroup = 3,
-                   ...){
-              require(abind)
+                   min.nonNAnum.repgroup = 3,
+				   min.nonNApercent = 0.4){
+           
               peaks <- msdata@intMatrix
               reps  <- msdata@sampleData[-blanks, ]$ReplicationGroup
               filt  <- array(dim = c(length(levels(reps)), dim(peaks)[1], 0))
@@ -64,22 +66,26 @@ setMethod("PeakFilter", "MSdata",
               
 			  } else {       
                   if (!is.null(above.blank) & !is.null(blanks)) {
-                      filt <- abind(along = 3, filt, repapply(function(peakgr, peak) 
+                      filt <- abind::abind(along = 3, filt, repapply(function(peakgr, peak) 
                           mean(peakgr, na.rm = TRUE) - above.blank * se(peakgr) >
                           mean(blankpeaks, na.rm = TRUE) + above.blank * se(blankpeaks)))
                   }
                   # if (!is.null(fold.blank) & !is.null(blanks)) {
-                      # filt <- abind(along = 3, filt, repapply(function(repGroup, peak)
+                      # filt <- abind::abind(along = 3, filt, repapply(function(repGroup, peak)
                           # TRUE))
                   # }
               }
               
               if (!is.null(min.int)) {
-                  filt <- abind(along = 3, filt, repapply(function(peakgr, ...) mean(peakgr, na.rm = T) >= min.int))
+                  filt <- abind::abind(along = 3, filt, repapply(function(peakgr, ...) mean(peakgr, na.rm = T) >= min.int))
               }
               
-              if (!is.null(min.number.repgroup)) {
-                  filt <- abind(along = 3, filt, repapply(function(peakgr, ...) sum(!is.na(peakgr)) >= min.number.repgroup))
+              if (!is.null(min.nonNAnum.repgroup)) {
+                  filt <- abind::abind(along = 3, filt, repapply(function(peakgr, ...) sum(!is.na(peakgr)) >= min.nonNAnum.repgroup))
+              }
+			  
+			  if (!is.null(min.nonNApercent)) {
+                  filt <- abind::abind(along = 3, filt, repapply(peaks, 1, function(peak) sum(!is.na(peak))/length(peak) >= min.nonNApercent))
               }
 			  
               filtered.peaks <- apply(apply(filt, 2, apply, 1, all, na.rm = FALSE), 2, any, na.rm = FALSE)

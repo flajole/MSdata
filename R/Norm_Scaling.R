@@ -16,6 +16,7 @@ setGeneric("DataScaling",
 #' \code{"pareto"} - Pareto scaling, mean-centring and dividing by the square root of standard deviation of each variable; \cr
 #' \code{"range"} - Range scaling, mean-centring and dividing by the range of each variable 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
+#' @name DataScaling
 #' @export 
 
 setMethod("DataScaling", "MSdata",

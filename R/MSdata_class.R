@@ -70,6 +70,8 @@ setValidity("MSdata", function(object) {
 
 ## Peak meta-data accesors and replacement methods
 setGeneric("peakData", function(msdata, ...) standardGeneric("peakData"))
+#' @param msdata MSdata-class object
+#' @param value The data to replace data in corresponding slot of \code{msdata}
 #' @export
 #' @rdname MSdata-class
 setMethod("peakData", "MSdata", 

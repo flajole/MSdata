@@ -13,6 +13,7 @@ setGeneric("DataTransform",
 #' \code{"cuberoot"} - cube root transformation \cr
 #' 
 #' @return \code{\link{MSdata-class}} object with transformed intensity matrix
+#' @name DataTransform
 #' @export 		   
 setMethod("DataTransform", "MSdata",
           function(msdata, method = "glog10") {

@@ -13,6 +13,7 @@ setGeneric("Norm",
 #' @param ref.cmpd For \code{"RefCompound"} method, the name or number of reference compound.
 #' 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
+#' @name Norm
 #' @export 		   	
 setMethod("Norm", "MSdata",
           function(msdata,

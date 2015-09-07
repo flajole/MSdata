@@ -19,6 +19,7 @@ setGeneric("RTindexing",
 #'
 #' @return \code{\link{MSdata-class}} object with recalculated RT values in peak data 
 #' @seealso \code{\link{MZindexing}}
+#' @name RTindexing
 #' @export
 
 setMethod("RTindexing", "MSdata",
@@ -75,7 +76,7 @@ setMethod("RTindexing", "MSdata",
                                               # xset@peaks[, "rt"] > targets[i, "rt"] - rt.window & 
                                               # xset@peaks[, "rt"] < targets[i, "rt"] + rt.window, ]
                   # if (identical(as.integer(targeted.peak[, "sample"]), 1:nsmp)) 
-                  # targeted.peaks <- abind(targeted.peaks, targeted.peak, along = 3)
+                  # targeted.peaks <- abind::abind(targeted.peaks, targeted.peak, along = 3)
               # }
               # if (model == "steplinear") {
                   # coef.a <- matrix(targets[, "rt"] - c(0, targets[-ntrg, "rt"]), 

@@ -1,13 +1,30 @@
 Package: MSdata
 Title: Mass-spectrometry data analysis package
-Description: Package for mass-spectrometry data analysis working in connection with MApckg (MetaboAnalyst).
+Description: Package for mass-spectrometry data analysis working in connection
+    with MApckg (MetaboAnalyst).
 Version: 0.1
-Suggests: knitr
+Suggests:
+    knitr
 VignetteBuilder: knitr
 URL: http://github.com/flajole/MSdata
 BugReports: http://github.com/flajole/MSdata/issues
 Authors@R: person("Dmitry", "Zubkov", email = "zubkov@mpimp-golm.de", role = c("aut", "cre"))
-Imports:   
-	abind
+Imports:
+    abind,
+    pcaMethods
 License: GPL-3
 LazyData: true
+Collate:
+    'MSdata_class.R'
+    'EvalMissVal.R'
+    'MQI_to_MA.R'
+    'MSdata_to_MA.R'
+    'MSupload.R'
+    'MZindexing.R'
+    'Norm.R'
+    'Norm_Scaling.R'
+    'Norm_Standards.R'
+    'Norm_Transform.R'
+    'PQI_to_MA.R'
+    'PeakFilter.R'
+    'RTindexing.R'

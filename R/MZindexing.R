@@ -20,11 +20,11 @@ setGeneric("MZindexing",
 #'
 #' @return \code{\link{MSdata-class}} object with recalculated MZ values in peak data
 #' @seealso \code{\link{RTindexing}}
+#' @name MZindexing
 #' @export
 setMethod("MZindexing", "MSdata",
           function(object, 
                    targets.list, 
-                   model       = "steplinear", 
                    mz.window   = 0.02, 
                    rt.window   = 3) {
               peak.rt <- object@peakData[, "rt"]

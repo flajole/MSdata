@@ -1,7 +1,26 @@
+#' Upload MSdata 
+#' 
+#' Create a \code{\link{MSdata-class}} object from external data tables.
+#'
+#' @param object One of: 
+#' \enumerate{
+#' \item a character vector of length 1 - just a file path name of one .csv or .txt data frame.\cr
+#' \item a list of paths to three files: matrix of intensities, sample metadata and peak metadata.
+#' }
+#' @param orientation Orientation of table, one of \code{"SamplesInCol"} or \code{"SamplesInRow"}
+#' @name MSupload
+
 setGeneric("MSupload", 
            function(object, ...) standardGeneric("MSupload"))
 
-
+#' @param sampleDataLines The number of lines containing data about samples.
+#' @param peakDataLines The number of lines containing data about peaks/compounds.
+#' @param sampleNames If \code{TRUE}, sample names are taken from the first column/row of table. \cr
+#' If \code{FALSE}, standard names like \code{"sample1"} are created.
+#' @param peakNames If \code{TRUE}, sample names are taken from the first row/column of table. \cr
+#' If \code{FALSE}, standard names like \code{"peak1"} are created.
+#' @describeIn MSupload
+#' @export
 setMethod("MSupload", "character",
           function(object, 
                    orientation = "SamplesInCol", 
@@ -25,8 +44,8 @@ setMethod("MSupload", "character",
               .sampleData <- data.frame(t(tab[ (1:sampleDataLines), -(1:peakDataLines)]))
               .peakData   <- data.frame(  tab[-(1:sampleDataLines),  (1:peakDataLines)] )
               
-              names(.sampleData) <- tab[1:sampleDataLines,peakDataLines]
-              names(.peakData)   <- tab[sampleDataLines,1:peakDataLines]
+              names(.sampleData) <- tab[1:sampleDataLines, peakDataLines]
+              names(.peakData)   <- tab[sampleDataLines, 1:peakDataLines]
               
               if (sampleNames) {
                   rownames(.sampleData) <- .sampleData[ , 1]
@@ -56,6 +75,9 @@ setMethod("MSupload", "character",
                      processLog = .processLog)
           })
 
+
+#' @describeIn MSupload
+#' @export
 setMethod("MSupload", "list",
           function(object = list(intFile = "",
                                  sampleFile = "",
@@ -65,7 +87,7 @@ setMethod("MSupload", "list",
               match.arg(orientation, c("SamplesInCol", "SamplesInRow"))
               
               if (length(object$intFile) == 0) {
-                  stop("Please, enter the filepath for the matrix of intensities/concentrations.")
+                  stop("Please, enter the file path for the matrix of intensities/concentrations.")
               }
               
               fileFormat <- substr(object$intFile, nchar(object)-2, nchar(object))
