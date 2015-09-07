@@ -35,8 +35,12 @@ If \code{FALSE}, standard names like \code{"sample1"} are created.}
 \item{peakNames}{If \code{TRUE}, sample names are taken from the first row/column of table. \cr
 If \code{FALSE}, standard names like \code{"peak1"} are created.}
 }
+\value{
+\code{\link{MSdata-class}} object
+}
 \description{
 Create a \code{\link{MSdata-class}} object from external data tables.
+Automatically adds a \code{ReplicationGroup} column in \code{sampleData} table according to group factors combinations.
 }
 \section{Methods (by class)}{
 \itemize{
