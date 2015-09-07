@@ -29,7 +29,7 @@ setMethod("Norm", "MSdata",
                   biomass.table <- suppressWarnings(read.table(biomass.list, row.names = 1, col.names = c("Biomass")))
 				  
 				  miss.samples <- setdiff(colnames(.intMatrix), rownames(biomass.table))  
-				  if (length(miss.samples) > 0))
+				  if (length(miss.samples) > 0)
 					  stop("Not all sample names are found in biomass table!")
 					  
 				  biomass.table <- biomass.table[colnames(.intMatrix), ]  
@@ -42,7 +42,7 @@ setMethod("Norm", "MSdata",
                   msg <- paste0("Data are normalised by biomass; the file used as list: ", biomass.list)
                   
               } else if (method == "Median") {
-                  medians <- matrix(apply(.intMatrix, 2, median, na.rm = TRUE)
+                  medians <- matrix(apply(.intMatrix, 2, median, na.rm = TRUE),
                                     nrow=nrow(.intMatrix), 
                                     ncol=ncol(.intMatrix), 
                                     byrow=TRUE)

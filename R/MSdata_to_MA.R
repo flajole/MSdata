@@ -1,15 +1,15 @@
 setGeneric("MSdata_to_MA", 
-           function(msdata, ...) standardGeneric("MSupload"))
+           function(msdata, ...) standardGeneric("MSdata_to_MA"))
 
 
 #' Convert MSdata object to MetaboAnalyst object
 #' 
-#' Create object dataSet for storing data for processing in MetaboAnalysis.
+#' Create an object for storing data for processing in MetaboAnalysis (\code{MApckg}).
 #'
 #' @param msdata An object of \code{\link[MSdata]{MSdata}} class.
 #' @param designType \code{"time"} if the data is time-series data; \code{"regular"} otherwise. 
-#' In the first case Of of the factors \code{facA} or \code{facB} have to be equal \code{"time"}
-#' @param facA Grouping factor, one of the names of sample data columns in \code{msdata@sampleData} 
+#' In the first case one of the arguments \code{facA} or \code{facB} have to be equal \code{"Time"}
+#' @param facA Grouping factor, one of the names of sample data columns in \code{msdata@@sampleData} 
 #' @param facB Optional second factor.
 #' 
 #' @export
@@ -43,7 +43,7 @@ setMethod("MSdata_to_MA", "MSdata",
                   dataSet$facB <- as.factor(msdata@sampleData[[facB]]);
               }
               
-              if(dataSet$design.type =="time"){
+              if(dataSet$design.type == "time"){
                   dataSet$format <- "colts";
                   # determine time factor
                   if(tolower(facA) == "time"){
@@ -53,6 +53,7 @@ setMethod("MSdata_to_MA", "MSdata",
                   }else{
                       Warning("No time points found in your data");
                       Warning("The time points group must be labeled as \"Time\"");
+					  dataSet$design.type <- "regular"
                   }
               }
               
@@ -87,6 +88,4 @@ setMethod("MSdata_to_MA", "MSdata",
               dataSet$cls <- as.factor(cls.lbl)
               dataSet$cls.num <- length(levels(dataSet$cls))
               return(dataSet);
-          }
-          
-          
+          })

@@ -2,59 +2,6 @@ setGeneric("MSupload",
            function(object, ...) standardGeneric("MSupload"))
 
 
-#' Transforms an object of xcmsSet class into object of MSdata class
-#'
-#' @param object method to order colors 
-#' 
-#' @param intensity the measure of intensity:
-#' \code{"into"} - integrated area of original (raw) peak
-#' \code{"intf"} - integrated area of filtered peak
-#' \code{"maxo"} - maximum intensity of original (raw) peak
-#' \code{"maxf"} - maximum intensity of filtered peak
-#' 
-#'
-#' @return \code{\link{MSdata}} class object
-#' 
-#' @seealso \code{\link{MSdata}}
-#' @keywords methods
-#' @examples
-#' None
-#'
-#' @export
-
-# into:  integrated area of original (raw) peak
-# intf:  integrated area of filtered peak
-# maxo:  maximum intensity of original (raw) peak
-# maxf:  maximum intensity of filtered peak
-
-setMethod("MSupload", "xcmsSet",
-          function(object, 
-                   intensity = c("into", "intf", "maxo", "maxf")){
-              xset <- object
-              intensity <- match.arg(intensity)
-              .sampleData <- xset@phenoData
-              .peakData <- data.frame(xset@groups[,1:7])
-              rownames(.sampleData) = rownames(xset@phenoData)
-              if (is.NULL(rownames(xset@peaks))) {
-                  rownames(.peakData) <- paste0("peak",   1:nrow(.peakData))
-              } else {
-                  rownames(.peakData) <- rownames(xset@peaks)
-              }
-              
-              .intMatrix <- matrix(NA, nrow = nrow(.peakData), ncol = nrow(.sampleData))
-              rownames(.intMatrix) <- rownames(.peakData)
-              colnames(.intMatrix) <- rownames(.sampleData)
-              for (i in 1:length(xset@groupidx)) {
-                  smpl <- xset@peaks[xset@groupidx[[i]], c("sample", intensity)]
-                  .intMatrix[i, smpl[ , "sample"]] <- smpl[ , intensity]
-              }
-              .processLog <- paste0("Data uploaded from xcmsSet\n\nList of original files:\n", paste(xset@filepaths, collapse="\n"))
-              MSdata(intMatrix  = .intMatrix,
-                     peakData   = .peakData,
-                     sampleData = .sampleData,
-                     processLog = .processLog)
-          })
-
 setMethod("MSupload", "character",
           function(object, 
                    orientation = "SamplesInCol", 
@@ -201,3 +148,55 @@ RepGroup <- function(sampleData, impFact = names(sampleData)) {
     levels(repGroup)<- 1:length(levels(repGroup))
     return(repGroup)
     }
+
+
+# #' Transforms an object of xcmsSet class into object of MSdata class
+# #'
+# #' @param object method to order colors 
+# #' 
+# #' @param intensity the measure of intensity:
+# #' \code{"into"} - integrated area of original (raw) peak
+# #' \code{"intf"} - integrated area of filtered peak
+# #' \code{"maxo"} - maximum intensity of original (raw) peak
+# #' \code{"maxf"} - maximum intensity of filtered peak
+# #' 
+# #'
+# #' @return \code{\link{MSdata-class}} object
+# #' 
+# #' @seealso \code{\link{MSdata-class}}
+# #'
+# #' @export
+
+# into:  integrated area of original (raw) peak
+# intf:  integrated area of filtered peak
+# maxo:  maximum intensity of original (raw) peak
+# maxf:  maximum intensity of filtered peak
+
+# setMethod("MSupload", "xcmsSet",
+          # function(object, 
+                   # intensity = c("into", "intf", "maxo", "maxf")){
+              # xset <- object
+              # intensity <- match.arg(intensity)
+              # .sampleData <- xset@phenoData
+              # .peakData <- data.frame(xset@groups[,1:7])
+              # rownames(.sampleData) = rownames(xset@phenoData)
+              # if (is.NULL(rownames(xset@peaks))) {
+                  # rownames(.peakData) <- paste0("peak",   1:nrow(.peakData))
+              # } else {
+                  # rownames(.peakData) <- rownames(xset@peaks)
+              # }
+              
+              # .intMatrix <- matrix(NA, nrow = nrow(.peakData), ncol = nrow(.sampleData))
+              # rownames(.intMatrix) <- rownames(.peakData)
+              # colnames(.intMatrix) <- rownames(.sampleData)
+              # for (i in 1:length(xset@groupidx)) {
+                  # smpl <- xset@peaks[xset@groupidx[[i]], c("sample", intensity)]
+                  # .intMatrix[i, smpl[ , "sample"]] <- smpl[ , intensity]
+              # }
+              # .processLog <- paste0("Data uploaded from xcmsSet\n\nList of original files:\n", paste(xset@filepaths, collapse="\n"))
+              # MSdata(intMatrix  = .intMatrix,
+                     # peakData   = .peakData,
+                     # sampleData = .sampleData,
+                     # processLog = .processLog)
+          # })
+

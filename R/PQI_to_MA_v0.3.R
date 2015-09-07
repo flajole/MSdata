@@ -22,7 +22,7 @@
 #' \code{"shortDescription"} means that the data from "Description" column are used, 
 #' but they are cut starting with "OS=".
 #'
-#' @example
+#' @examples
 #' PQI_to_MA("//mpimp-golm/user/Homes/Zubkov/QI_data")
 #' PQI_to_MA("\\\\mpimp-golm\\user\\Homes\\Zubkov\\QI_data")
 #' PQI_to_MA("C:/QI_data", abundance = "Raw", compoundID = "Accession")

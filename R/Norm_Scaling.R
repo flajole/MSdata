@@ -19,27 +19,27 @@ setGeneric("DataScaling",
 #' @export 
 
 setMethod("DataScaling", "MSdata",
-          function(msdata, method = "pareto", )) {
-    match.arg(method, c("pareto", "auto", "range"))
-    .int.Matrix <- intMatrix(msdata)
-    if (method == "pareto") {
-        .intMatrix <- apply(.int.Matrix, 1, ParetoNorm)
-            
-    } else if (method == "auto") {
-        .intMatrix <- apply(.int.Matrix, 1, AutoNorm)
-            
-    } else if (method == "range") {
-        .intMatrix <- apply(.int.Matrix, 1, RangeNorm)
-    }
-    rownames(.intMatrix) <- rownames(intMatrix(msdata))
-	colnames(.intMatrix) <- colnames(intMatrix(msdata))
-    
-    .processLog <- paste0(.processLog, "Data are rescaled by ", method, " scaling\n")
-    MSdata(intMatrix  = .intMatrix,
-           peakData   = peakData(msdata),
-           sampleData = sampleData(msdata),
-           processLog = .processLog)
-}
+          function(msdata, method = "pareto") {
+              match.arg(method, c("pareto", "auto", "range"))
+              .int.Matrix <- intMatrix(msdata)
+              if (method == "pareto") {
+                  .intMatrix <- apply(.int.Matrix, 1, ParetoNorm)
+                  
+              } else if (method == "auto") {
+                  .intMatrix <- apply(.int.Matrix, 1, AutoNorm)
+                  
+              } else if (method == "range") {
+                  .intMatrix <- apply(.int.Matrix, 1, RangeNorm)
+              }
+              rownames(.intMatrix) <- rownames(intMatrix(msdata))
+              colnames(.intMatrix) <- colnames(intMatrix(msdata))
+              
+              .processLog <- paste0(.processLog, "Data are rescaled by ", method, " scaling\n")
+              MSdata(intMatrix  = .intMatrix,
+                     peakData   = peakData(msdata),
+                     sampleData = sampleData(msdata),
+                     processLog = .processLog)
+          })
 
 
 

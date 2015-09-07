@@ -1,5 +1,5 @@
 setGeneric("RTindexing", 
-           function(object, ...) standardGeneric("RTindexing")
+           function(object, ...) standardGeneric("RTindexing"))
 		   
 #' Retention time indexing
 #'
@@ -20,11 +20,12 @@ setGeneric("RTindexing",
 #' @return \code{\link{MSdata-class}} object with recalculated RT values in peak data 
 #' @seealso \code{\link{MZindexing}}
 #' @export
+
 setMethod("RTindexing", "MSdata",
           function(object, 
                    targets.list, 
                    mz.window   = 0.02, 
-                   rt.window   = 30) {
+                   rt.window   = 30){
               peak.rt <- object@peakData[, "RT"]
               peak.mz <- object@peakData[, "MZ"]
               targets <- read.table(targets.list, col.names = c("compound", "mz", "rt"))

@@ -1,22 +1,20 @@
-#' Class of MS data table with meta-daat of peaks and samples
-#'
-#' @slot intMatrix 
-#' @slot peakData metadata 
-#' @slot sampleData
-#' @slot processLog
+#' MSdata class
 #' 
-#' @return \code{\link{MSdata}} class object
+#' MSdata-S4 class description, with it's accessors and replacement methods.
 #' 
-#' @examples
-#' None
-#'
+#' @slot intMatrix The matrix of peak intensities / compound concentrations.
+#' @slot peakData  Peak metadata.
+#' @slot sampleData Sample metadata.
+#' @slot processLog Processing log.
+#' 
+#' @name MSdata-class
 #' @export
 
 MSdata <- setClass("MSdata",
-                     slots = c(intMatrix  = "matrix",
-                               peakData   = "data.frame",
-                               sampleData = "data.frame",
-                               processLog = "character"))
+                   slots = c(intMatrix  = "matrix",
+                             peakData   = "data.frame",
+                             sampleData = "data.frame",
+                             processLog = "character"))
 
 setMethod("show",
           signature = "MSdata",
@@ -25,19 +23,19 @@ setMethod("show",
               cat(" ", nrow(object@intMatrix), " peaks by ",
                   ncol(object@intMatrix), " samples.\n", sep = "")
               invisible(NULL)
-              })
+          })
 
 setMethod("[", "MSdata",
-            function(x, i, j, drop = "missing") {
-                .intMatrix  <- x@intMatrix[i, j]
-                .peakData   <- x@peakData[i, ]
-                .sampleData <- x@sampleData[j, ]
-                .processLog <- x@processLog
-                MSdata(intMatrix  = .intMatrix,
-                       peakData   = .peakData,
-                       sampleData = .sampleData,
-                       processLog = .processLog)
-                })
+          function(x, i, j, drop = "missing") {
+              .intMatrix  <- x@intMatrix[i, j]
+              .peakData   <- x@peakData[i, ]
+              .sampleData <- x@sampleData[j, ]
+              .processLog <- x@processLog
+              MSdata(intMatrix  = .intMatrix,
+                     peakData   = .peakData,
+                     sampleData = .sampleData,
+                     processLog = .processLog)
+          })
 
 setValidity("MSdata", function(object) {
     msg <- NULL
@@ -69,53 +67,61 @@ setValidity("MSdata", function(object) {
 
 ##==============================================================================
 
-## Peak meta-data accesors and replacement methods
-setGeneric("peakData", function(object, ...) standardGeneric("peakData"))
 
+## Peak meta-data accesors and replacement methods
+setGeneric("peakData", function(msdata, ...) standardGeneric("peakData"))
+#' @export
+#' @rdname MSdata-class
 setMethod("peakData", "MSdata", 
-          function(object) object@peakData)
+          function(msdata) msdata@peakData)
 
 setGeneric("peakData<-",
-           function(object, value) standardGeneric("peakData<-"))
-
+           function(msdata, value) standardGeneric("peakData<-"))
+#' @export
+#' @rdname MSdata-class
 setMethod("peakData<-", "MSdata",
-          function(object, value) {
-              object@peakData <- value
-              if (validObject(object))
-                  return(object)
+          function(msdata, value) {
+              msdata@peakData <- value
+              if (validObject(msdata))
+                  return(msdata)
           })
 
 ## Sample meta-data accesors and replacement methods
-setGeneric("sampleData", function(object, ...) standardGeneric("sampleData"))
+setGeneric("sampleData", function(msdata, ...) standardGeneric("sampleData"))
 
+#' @export
+#' @rdname MSdata-class
 setMethod("sampleData", "MSdata",
-          function(object) object@sampleData)
+          function(msdata) msdata@sampleData)
 
 setGeneric("sampleData<-",
-           function(object, value) standardGeneric("sampleData<-"))
-
+           function(msdata, value) standardGeneric("sampleData<-"))
+#' @export
+#' @rdname MSdata-class
 setMethod("sampleData<-", "MSdata",
-          function(object, value) {
-              object@sampleData <- value
-              if (validObject(object))
-                  return(object)
+          function(msdata, value) {
+              msdata@sampleData <- value
+              if (validObject(msdata))
+                  return(msdata)
           })
 
 ## Intensity matrix accesors and replacement methods
-setGeneric("intMatrix", function(object, ...) standardGeneric("intMatrix"))
-
+setGeneric("intMatrix", function(msdata, ...) standardGeneric("intMatrix"))
+#' @export
+#' @rdname MSdata-class
 setMethod("intMatrix", "MSdata",
-          function(object) object@intMatrix)
+          function(msdata) msdata@intMatrix)
 
 setGeneric("intMatrix<-",
-           function(object, value) standardGeneric("intMatrix<-"))
+           function(msdata, value) standardGeneric("intMatrix<-"))
 
+#' @export
+#' @rdname MSdata-class
 setMethod("intMatrix<-", "MSdata",
-          function(object, value) {
-              object@intMatrix <- value
-              if (validObject(object))
-                  return(object)
+          function(msdata, value) {
+              msdata@intMatrix <- value
+              if (validObject(msdata))
+                  return(msdata)
           })
 
 ##==============================================================================
-

@@ -1,12 +1,13 @@
 setGeneric("EvalMissVal", 
            function(msdata, ...) standardGeneric("EvalMissVal"))
-#'
-
+		   
 setMethod("EvalMissVal", "MSdata",
-          function(msdata, EvalMethod = "Min", ...){
+          function(msdata, 
+					EvalMethod = "Min", 
+					...) {
               .intMatrix <- msdata@intMatrix
               npks <- nrows(.intMatrix)
-              match.arg <- (EvalMethod, c("Min", "FeatureMin", "FeatureMean", "FeatureMedian", "PCA", "GausSim"))
+              match.arg(EvalMethod, c("Min", "FeatureMin", "FeatureMean", "FeatureMedian", "PCA", "GausSim"))
               
               if (EvalMethod == "GausSim") {
                   randomset <- as.integer(rnorm(n = sum(is.na(.intMatrix)), mean = Mean, sd = Sd))

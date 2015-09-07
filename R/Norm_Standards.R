@@ -12,7 +12,7 @@ setGeneric("StandNorm",
 #' @param msdata \code{\link{MSdata-class}} object
 #' @param standards.list The link to the file with the table of standards looking like: name, mz, retention time
 #' @param meanInt Mean sum intensity of all the standards (ususally, from previous experiments).
-#' @param recalculateMean If \code{TRUE} \{meanInt} is not used, but is recalculated from this particular data.
+#' @param recalculateMean If \code{TRUE} then \code{meanInt} is not used, but is recalculated from these particular data.
 #' 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
 #' @export 		   		   
