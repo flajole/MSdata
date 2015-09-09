@@ -75,7 +75,7 @@ setMethod("Norm", "MSdata",
                   msg <- paste0("Data are normalised by reference compound ", ref.cmpd)
               } 
               
-              .processLog <- paste0(processLog(msdata), "\n\n Normalisation: ", msg)
+              .processLog <- paste0(msdata@processLog, "\n\n Normalisation: ", msg)
               
               MSdata(intMatrix  = .intMatrix,
                      peakData   = peakData(msdata),

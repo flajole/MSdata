@@ -1,7 +1,6 @@
 setGeneric("EvalMissVal", 
            function(msdata, ...) standardGeneric("EvalMissVal"))
 		   
-		   
 #' Evaluate Missing Values
 #' 
 #' Fill NA positions in data set.
@@ -10,7 +9,8 @@ setGeneric("EvalMissVal",
 #' "Min", "FeatureMin", "FeatureMean", "FeatureMedian", "PCA", "GausSim"
 #' @param ... Other optional parameters: 
 #' \itemize{
-#' \item  \code{pcamethods} - character vector containing the name of applied PCA method, one of:
+#' \item \code{percent} - which quotient of minimal value is used to replace missing values
+#' \item \code{pcamethods} - character vector containing the name of applied PCA method, one of:
 #' 
 #' }
 #' @include MSdata_class.R
@@ -21,7 +21,7 @@ setMethod("EvalMissVal", "MSdata",
 				   method = "Min", 
 				   ...) {
               .intMatrix <- msdata@intMatrix
-              npks <- nrows(.intMatrix)
+              npks <- nrow(.intMatrix)
               match.arg(method, c("Min", "FeatureMin", "FeatureMean", "FeatureMedian", "PCA", "GausSim"))
               
               if (method == "GausSim") {
@@ -36,7 +36,7 @@ setMethod("EvalMissVal", "MSdata",
               } else if (method == "FeatureMin") {
                   for (i in 1:npks) {
                       pkmin <- min(.intMatrix[i, ], na.rm = T);
-                      .intMatrix[i, ][is.na(.intMatrix[i, ])] <- pkmean
+                      .intMatrix[i, ][is.na(.intMatrix[i, ])] <- pkmin
                   }
                   msg <- "Missing variables were replaced with the half of minimum values for each feature column."
                   
@@ -63,7 +63,7 @@ setMethod("EvalMissVal", "MSdata",
                   .intMatrix[is.na(.intMatrix)] <- rowMeans(sapply(allpc, '[', is.na(.intMatrix)))
 				  msg <- "Missing variables were replaced with PCA-predicted values."
               }
-              .processLog <- paste0(processLog(msdata), "\n\n EvalMissVal: ", msg)
+              .processLog <- paste0(msdata@processLog, "\n\n EvalMissVal: ", msg)
               MSdata(intMatrix  = .intMatrix,
                      peakData   = peakData(msdata),
                      sampleData = sampleData(msdata),

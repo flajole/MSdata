@@ -22,20 +22,21 @@ setGeneric("DataScaling",
 setMethod("DataScaling", "MSdata",
           function(msdata, method = "pareto") {
               match.arg(method, c("pareto", "auto", "range"))
-              .int.Matrix <- intMatrix(msdata)
+              .intMatrix <- intMatrix(msdata)
               if (method == "pareto") {
-                  .intMatrix <- apply(.int.Matrix, 1, ParetoNorm)
+                  .intMatrix <- apply(.intMatrix, 1, ParetoNorm)
                   
               } else if (method == "auto") {
-                  .intMatrix <- apply(.int.Matrix, 1, AutoNorm)
+                  .intMatrix <- apply(.intMatrix, 1, AutoNorm)
                   
               } else if (method == "range") {
-                  .intMatrix <- apply(.int.Matrix, 1, RangeNorm)
+                  .intMatrix <- apply(.intMatrix, 1, RangeNorm)
               }
-              rownames(.intMatrix) <- rownames(intMatrix(msdata))
-              colnames(.intMatrix) <- colnames(intMatrix(msdata))
+			  .intMatrix <- t(.intMatrix)
+              #rownames(.intMatrix) <- rownames(intMatrix(msdata))
+              #colnames(.intMatrix) <- colnames(intMatrix(msdata))
               
-              .processLog <- paste0(.processLog, "Data are rescaled by ", method, " scaling\n")
+              .processLog <- paste0(msdata@processLog, "Data are rescaled by ", method, " scaling\n")
               MSdata(intMatrix  = .intMatrix,
                      peakData   = peakData(msdata),
                      sampleData = sampleData(msdata),
