@@ -1,18 +1,17 @@
 #' \code{PQI_to_MA} converts protein QI data output
 #' @rdname QI_to_MA
 #' @export
-PQI_to_MA <- function(directory = getwd(),
-                      abundance = "Normalised",
+PQI_to_MA <- function(path = getwd(),
+                      abundance = "Raw",
                       facNames  = NULL,
                       compoundID = "shortDescription") {
-    oldwd <- getwd()
-    on.exit(setwd(oldwd))    
-    setwd(directory)
     match.arg(abundance, c("Normalised", "Raw"))
     match.arg(compoundID, c("Accession", "Description", "shortDescription"))
-    
-    rawfiles <- list.files(pattern = ".csv", full.names = TRUE, include.dirs = TRUE)
-    
+	
+	files <- grepl(".csv", path)
+	dirs  <- !files
+	rawfiles <- c(path[files], unlist(sapply(path[dirs], list.files, pattern = ".csv", full.names = TRUE, include.dirs = TRUE))
+	
     for (j in 1:length(rawfiles)) {
         in.tab <- read.csv(rawfiles[j], stringsAsFactors = FALSE, header = FALSE)
         tab <- in.tab
@@ -46,10 +45,11 @@ PQI_to_MA <- function(directory = getwd(),
         
         tab[1,]  <- tab[3,]
         tab[1,1] <- "Sample"
-        
-        # replace spaces with "_" in compound names
+		# remove commas and replace spaces with "_" in compound and sample names
         tab[1] <- sapply(tab[1], gsub, pattern = " ", replacement = "_")
-        
+		tab[ , 1] <- sapply(tab[ , 1], gsub, pattern = " ", replacement = "_")
+		tab <- sapply(tab, gsub, pattern = ",", replacement = "")
+		
         sp <- strsplit(as.character(tab[2,-1]), "_")
         facNum <- unique(sapply(sp, length))
         if (length(facNum) != 1) {
@@ -76,7 +76,7 @@ PQI_to_MA <- function(directory = getwd(),
             }
         }
         
-        groupData <- data.frame(cbind(facNames, sapply(sp, '[', 1:max(facNum))))
+        groupData <- data.frame(cbind(facNames, sapply(sp, '[', 1:max(facNum))), stringsAsFactors = FALSE)
         names(groupData) <- names(tab)
         tab <- rbind(tab[1, ], groupData, tab[-(1:3), ])
         
