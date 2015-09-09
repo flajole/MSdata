@@ -8,6 +8,7 @@
 #' \item a list of paths to three files: matrix of intensities, sample metadata and peak metadata.
 #' }
 #' @param orientation Orientation of table, one of \code{"SamplesInCol"} or \code{"SamplesInRow"}
+#' @param zeros.as.NA If \code{TRUE} then zero intensities are treated as NAs.
 #' @return \code{\link{MSdata-class}} object
 #' @name MSupload
 
@@ -24,7 +25,8 @@ setGeneric("MSupload",
 #' @export
 setMethod("MSupload", "character",
           function(object, 
-                   orientation = "SamplesInCol", 
+                   orientation = "SamplesInCol",
+				   zeros.as.NA = TRUE,
                    sampleDataLines = 1, 
                    peakDataLines   = 1,
                    sampleNames = TRUE,
@@ -67,8 +69,9 @@ setMethod("MSupload", "character",
               
               rownames(.intMatrix) <- rownames(.peakData)
               colnames(.intMatrix) <- rownames(.sampleData)
-              
-              .sampleData$ReplicateGroup <- RepGroup(.sampleData)
+			  
+              if (zeros.as.NA) .intMatrix[.intMatrix==0] <- NA
+              #.sampleData$ReplicateGroup <- RepGroup(.sampleData)
               .processLog <- paste0("Data uploaded from the file:\n", object, "\n\n")
               MSdata(intMatrix  = .intMatrix,
                      peakData   = .peakData,
@@ -83,7 +86,8 @@ setMethod("MSupload", "list",
           function(object = list(intFile = "",
                                  sampleFile = "",
                                  peakFile = ""), 
-                   orientation = "SamplesInCol") {
+                   orientation = "SamplesInCol",
+				   zeros.as.NA = TRUE) {
               
               match.arg(orientation, c("SamplesInCol", "SamplesInRow"))
               
@@ -141,7 +145,8 @@ setMethod("MSupload", "list",
                   
               }
               
-              .sampleData$ReplicateGroup <- RepGroup(.sampleData)
+			  if (zeros.as.NA) .intMatrix[.intMatrix==0] <- NA
+              #.sampleData$ReplicateGroup <- RepGroup(.sampleData)
               .processLog <- paste0("Data uploaded from the files:\n", 
                                     object$intFile, " - intensity matrix\n",
                                     object$sampleFile, " - sample metadata\n",
