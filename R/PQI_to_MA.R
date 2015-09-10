@@ -10,7 +10,7 @@ PQI_to_MA <- function(path = getwd(),
 	
 	files <- grepl(".csv", path)
 	dirs  <- !files
-	rawfiles <- c(path[files], unlist(sapply(path[dirs], list.files, pattern = ".csv", full.names = TRUE, include.dirs = TRUE))
+	rawfiles <- c(path[files], unlist(sapply(path[dirs], list.files, pattern = ".csv", full.names = TRUE, include.dirs = TRUE)))
 	
     for (j in 1:length(rawfiles)) {
         in.tab <- read.csv(rawfiles[j], stringsAsFactors = FALSE, header = FALSE)
@@ -33,10 +33,12 @@ PQI_to_MA <- function(path = getwd(),
         normstart <- pmatch("Norm", in.tab[1, ])
         rawstart  <- pmatch("Raw", in.tab[1, ])
         specstart <- pmatch("Spec", in.tab[1, ])
+		tagstart  <- pmatch("Tags", in.tab[2, ])
+		rawstop <- min(specstart, tagstart, na.rm = TRUE) 
         if (abundance == "Normalised") {
             tab <- tab[c(idcmpd, normstart:(rawstart - 1))]
         } else {
-            tab <- tab[c(idcmpd, rawstart:(specstart - 1))]
+            tab <- tab[c(idcmpd, rawstart:(rawstop - 1))]
         }
         
         if (compoundID == "shortDescription") {
@@ -47,8 +49,9 @@ PQI_to_MA <- function(path = getwd(),
         tab[1,1] <- "Sample"
 		# remove commas and replace spaces with "_" in compound and sample names
         tab[1] <- sapply(tab[1], gsub, pattern = " ", replacement = "_")
-		tab[ , 1] <- sapply(tab[ , 1], gsub, pattern = " ", replacement = "_")
-		tab <- sapply(tab, gsub, pattern = ",", replacement = "")
+		tab[1, ] <- sapply(tab[1, ], gsub, pattern = " ", replacement = "_")
+		tab <- data.frame(apply(tab, 2, gsub, pattern = ",", replacement = ""), stringsAsFactors = FALSE)
+		#tab[1] <- sapply(tab, 2, gsub, pattern = ",", replacement = "")
 		
         sp <- strsplit(as.character(tab[2,-1]), "_")
         facNum <- unique(sapply(sp, length))

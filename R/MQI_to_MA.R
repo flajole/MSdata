@@ -51,7 +51,7 @@ MQI_to_MA <- function(path = getwd(),
 	
 	files <- grepl(".csv", path)
 	dirs  <- !files
-	rawfiles <- c(path[files], unlist(sapply(path[dirs], list.files, pattern = ".csv", full.names = TRUE, include.dirs = TRUE))
+	rawfiles <- c(path[files], unlist(sapply(path[dirs], list.files, pattern = ".csv", full.names = TRUE, include.dirs = TRUE)))
 	MAfiles <- character()
 	facNums <- integer()
 	
