@@ -27,8 +27,13 @@ setMethod("MZindexing", "MSdata",
                    targets.list, 
                    mz.window   = 0.02, 
                    rt.window   = 3) {
-              peak.rt <- object@peakData[, "rt"]
-              peak.mz <- object@peakData[, "mz"]
+				   
+			  .peakData <- peakData(object)
+			  if (!("RT" %in% names(.peakData)) | !("MZ" %in% names(.peakData))) 
+				  stop("There have to be \"RT\" and \"MZ\" columns in peak data table.")
+				  
+              peak.rt <- .peakData[, "RT"]
+              peak.mz <- .peakData[, "MZ"]
               targets <- read.table(targets.list, col.names = c("chemical", "mz", "rt"))
               if (all(targets[, "rt"] < 60)) targets[, "rt"] <- targets[, "rt"] * 60
               ntrg <- dim(targets)[1]
@@ -45,10 +50,14 @@ setMethod("MZindexing", "MSdata",
               coef.b <- c(coef.b, coef.b[length(coef.b)])
               c.a <- sapply(peak.mz, function(x) coef.a[sum(x > targeted.peaks) + 1])
               c.b <- sapply(peak.mz, function(x) coef.b[sum(x > targeted.peaks) + 1])
-              object@peakData["mz"] <- peak.mz * c.a + c.b
-              object@progressLog <- c(object@progressLog,
-                                      "\n\nMass-charge is indexed by internal standards list ",
-                                      targets.list, "\n",
-                                      paste(readLines(targets.list, warn = FALSE), collapse="\n"))
-              return(object)
+              .peakData["MZ"] <- peak.mz * c.a + c.b
+              .processLog <- c(object@processLog,
+                                "\n\nMass-charge is indexed by internal standards list ",
+                                targets.list, "\n",
+                                paste(readLines(targets.list, warn = FALSE), collapse="\n"))
+
+              MSdata(intMatrix  = intMatrix(object),
+                     peakData   = .peakData,
+                     sampleData = sampleData(object),
+                     processLog = .processLog)
           })

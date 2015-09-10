@@ -23,7 +23,7 @@ setGeneric("PeakFilter",
 #' have to be higher than \code{min.int} value.
 #' @param min.nonNAnum.repgroup Filter peaks with too many missing values. \code{min.number.repgroup} 
 #' is minimal number of non-NA values in replicate group.
-#' @param min.nonNAallgroups Filter peaks with too many missing values. \code{min.allgroups} 
+#' @param min.nonNApercent Filter peaks with too many missing values. \code{min.allgroups} 
 #' is minimal allowed quotient of non-NA values for each peak.
 #' @return \code{\link{MSdata-class}} object without filtered peaks and blank samples
 #' @name PeakFilter
@@ -36,41 +36,41 @@ setMethod("PeakFilter", "MSdata",
                    min.int = 1000,
                    min.nonNAnum.repgroup = 3,
 				   min.nonNApercent = 0.4){
-           
-              peaks <- msdata@intMatrix
-              filt  <- array(dim = c(length(levels(reps)), dim(peaks)[1], 0))
-              
+			  fold.blank<-NULL
+              .intMatrix <- intMatrix(msdata)
               se <- function(x) sqrt(var(x, na.rm = TRUE)/length(na.omit(x)))
-              
               repapply <- function(foo) {
-                  apply(peaks, 1, function(peak) tapply(peak, reps, foo, peak))
+                  apply(.intMatrix, 1, function(peak) tapply(peak, reps, foo, peak))
               }
-              
+			  
 #               rep.apply <- function(foo) {
 #                   sapply(levels(reps), function(repGroup)
-#                          apply(peaks[ , reps == repGroup], 1, foo))
+#                          apply(.intMatrix[ , reps == repGroup], 1, foo))
 #               }
 
 			  if (!is.null(blanks)) {
-					blankpeaks <- peaks[ , blank]
-					peaks <- peaks[ , -blank]
+					blank.intMatrix <- .intMatrix[ , blank]
+					.intMatrix <- .intMatrix[ , -blank]
 					reps  <- msdata@sampleData[-blanks, ]$ReplicationGroup
 			  } else {
 					reps  <- msdata@sampleData$ReplicationGroup
 			  }
+			  filt  <- array(dim = c(length(levels(reps)), nrow(.intMatrix), 0))
+			  
+
 			  
               if (is.null(blanks) & (!is.null(fold.blank) | !is.null(above.blank))) {
                   warning("Blank samples are not selected, filtering by blanks has not been conducted")
               
-			  } else if ((length(setdiff(blanks, colnames(peaks))) != 0) &
-                         (length(setdiff(blanks, 1:ncol(peaks)))   != 0)) {
-                  warning("Blank samples set does not match sample names or numbers, filtering by blanks has not been conducted")
+			  } else if ((length(setdiff(blanks, colnames(.intMatrix))) != 0) &
+                         (length(setdiff(blanks, 1:ncol(.intMatrix)))   != 0)) {
+                  warning("Blank samples set does not match sample names or numbers. Filtering by blanks will not be conducted")
               
 			  } else {       
                   if (!is.null(above.blank) & !is.null(blanks)) {
                       filt <- abind::abind(along = 3, filt, repapply(function(peakgr, peak) 
                           mean(peakgr, na.rm = TRUE) - above.blank * se(peakgr) >
-                          mean(blankpeaks, na.rm = TRUE) + above.blank * se(blankpeaks)))
+                          mean(blank.intMatrix, na.rm = TRUE) + above.blank * se(blank.intMatrix)))
                   }
                   # if (!is.null(fold.blank) & !is.null(blanks)) {
                       # filt <- abind::abind(along = 3, filt, repapply(function(repGroup, peak)
@@ -87,13 +87,21 @@ setMethod("PeakFilter", "MSdata",
               }
 			  
 			  if (!is.null(min.nonNApercent)) {
-                  filt <- abind::abind(along = 3, filt, repapply(peaks, 1, function(peak) sum(!is.na(peak))/length(peak) >= min.nonNApercent))
+				  comparison <- apply(.intMatrix, 1, function(peak) sum(!is.na(peak))/length(peak) >= min.nonNApercent)
+                  comparison <- matrix(comparison,
+                                    nrow = length(levels(reps)), 
+                                    ncol = nrow(.intMatrix), 
+                                    byrow = TRUE)
+                  filt <- abind::abind(along = 3, filt, comparison)
               }
 			  
               filtered.peaks <- apply(apply(filt, 2, apply, 1, all, na.rm = FALSE), 2, any, na.rm = FALSE)
-              msdata <- msdata[filtered.peaks, -blanks]
-              msdata@progressLog <- c(msdata@progressLog,
-                                      "\n\n", sum(filtered.peaks), " are filtered")
+			  msdata <- msdata[filtered.peaks, ]
+			  
+			  if (!is.null(blanks)) msdata <- msdata[ , -blanks]
+              
+			  msdata@processLog <- c(msdata@processLog,
+                                     "\n\n", sum(!filtered.peaks), " are filtered")
               return(msdata)
           })
 		  
