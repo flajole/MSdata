@@ -10,11 +10,11 @@
 MSupload(object, ...)
 
 \S4method{MSupload}{character}(object, orientation = "SamplesInCol",
-  sampleDataLines = 1, peakDataLines = 1, sampleNames = TRUE,
-  peakNames = TRUE)
+  zeros.as.NA = TRUE, sampleDataLines = 1, peakDataLines = 1,
+  sampleNames = TRUE, peakNames = TRUE)
 
 \S4method{MSupload}{list}(object = list(intFile = "", sampleFile = "",
-  peakFile = ""), orientation = "SamplesInCol")
+  peakFile = ""), orientation = "SamplesInCol", zeros.as.NA = TRUE)
 }
 \arguments{
 \item{object}{One of:
@@ -24,6 +24,8 @@ MSupload(object, ...)
 }}
 
 \item{orientation}{Orientation of table, one of \code{"SamplesInCol"} or \code{"SamplesInRow"}}
+
+\item{zeros.as.NA}{If \code{TRUE} then zero intensities are treated as NAs.}
 
 \item{sampleDataLines}{The number of lines containing data about samples.}
 

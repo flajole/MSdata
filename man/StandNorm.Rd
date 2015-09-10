@@ -3,7 +3,7 @@
 \docType{methods}
 \name{StandNorm}
 \alias{StandNorm}
-\title{Normalisation by the list internal standards}
+\title{Normalisation by standards}
 \usage{
 \S4method{StandNorm}{MSdata}(msdata, standards.list, meanInt = 2000,
   recalculateMean = FALSE)
@@ -11,9 +11,9 @@
 \arguments{
 \item{msdata}{\code{\link{MSdata-class}} object}
 
-\item{standards.list}{The link to the file with the table of standards looking like: name, mz, retention time}
+\item{standards.list}{The link to the file with the table of standards looking like: compound, m/z, retention time}
 
-\item{meanInt}{Mean sum intensity of all the standards (ususally, from previous experiments).}
+\item{meanInt}{Mean sum intensity of all the standards (usually, got from previous experiments).}
 
 \item{recalculateMean}{If \code{TRUE} then \code{meanInt} is not used, but is recalculated from these particular data.}
 }
@@ -22,6 +22,7 @@
 }
 \description{
 Normalisation by the list of external or internal standards.
-In each sample all the intensities are divided by sum of standards intensities.
+In each sample all the intensities are normalized by sum of standards intensities.
+Afterwards, standards are excluded from feature list.
 }
 

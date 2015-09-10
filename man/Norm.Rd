@@ -17,7 +17,7 @@
 \code{"RefCompound"} - concentration of reference compound\cr
 \code{"Biomass"} - sample biomass/volume/etc. \cr}
 
-\item{biomass.list}{For \code{"Biomass"} method, the link to the file containing the simple table with two columns: sampleID and biomasses/volumes/etc.}
+\item{biomass.list}{For \code{"Biomass"} method, the path to the file containing the simple table with two columns: sample ID and biomasses/volumes/etc.}
 
 \item{ref.cmpd}{For \code{"RefCompound"} method, the name or number of reference compound.}
 }
@@ -25,6 +25,6 @@
 \code{\link{MSdata-class}} object with normalised intensity matrix
 }
 \description{
-Sample-wise normalisations.
+Sample-wise normalisation methods.
 }
 

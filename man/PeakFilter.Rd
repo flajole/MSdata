@@ -27,7 +27,7 @@ have to be higher than \code{min.int} value.}
 \item{min.nonNAnum.repgroup}{Filter peaks with too many missing values. \code{min.number.repgroup}
 is minimal number of non-NA values in replicate group.}
 
-\item{min.nonNAallgroups}{Filter peaks with too many missing values. \code{min.allgroups}
+\item{min.nonNApercent}{Filter peaks with too many missing values. \code{min.allgroups}
 is minimal allowed quotient of non-NA values for each peak.}
 }
 \value{

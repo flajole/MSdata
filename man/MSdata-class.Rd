@@ -8,8 +8,10 @@
 \alias{intMatrix<-,MSdata-method}
 \alias{peakData,MSdata-method}
 \alias{peakData<-,MSdata-method}
+\alias{peakNames,MSdata-method}
 \alias{sampleData,MSdata-method}
 \alias{sampleData<-,MSdata-method}
+\alias{sampleNames,MSdata-method}
 \title{MSdata class}
 \usage{
 \S4method{peakData}{MSdata}(msdata)
@@ -23,6 +25,10 @@
 \S4method{intMatrix}{MSdata}(msdata)
 
 \S4method{intMatrix}{MSdata}(msdata) <- value
+
+\S4method{peakNames}{MSdata}(msdata)
+
+\S4method{sampleNames}{MSdata}(msdata)
 }
 \arguments{
 \item{msdata}{MSdata-class object}

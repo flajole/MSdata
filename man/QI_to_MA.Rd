@@ -6,15 +6,17 @@
 \alias{QI_to_MA}
 \title{Convert QI to MetaboAnalyst}
 \usage{
-MQI_to_MA(directory = getwd(), abundance = "Normalised",
+MQI_to_MA(path = getwd(), abundance = "Raw",
   compoundID = "Accepted Compound", facNames = NULL, unite_neg_pos = TRUE)
 
-PQI_to_MA(directory = getwd(), abundance = "Normalised", facNames = NULL,
+PQI_to_MA(path = getwd(), abundance = "Raw", facNames = NULL,
   compoundID = "shortDescription")
 }
 \arguments{
-\item{directory}{Path to the directory containing .csv QI output files.
-All the files in all subdirectories are proceeded too.
+\item{path}{Character vector. There could be two types of elements:\cr
+1) file path(s) to the proceeded .csv QI output file(s).\cr
+2) path(s) to the directory(ies) containing .csv files.\cr
+In the second case all the files in all subdirectories are proceeded.\cr
 Remember that in file paths you should use either "/" or double "\", not just "\".}
 
 \item{abundance}{If \code{"Normalised"}, then normalised data are used; if \code{"Raw"}, then raw data are used}
@@ -27,7 +29,7 @@ but they are cut starting with "OS=".}
 
 \item{facNames}{Character vector of grouping factor names.}
 
-\item{unite_neg_pos}{If \code{TRUE}, creates combined file from pos and neg file pairs with matching names;
+\item{unite_neg_pos}{If \code{TRUE}, creates combined file from "pos" and "neg" file pairs with matching names
 if \code{FALSE}, just skips this step}
 }
 \description{
