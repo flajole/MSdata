@@ -27,4 +27,5 @@ Collate:
     'Norm_Transform.R'
     'PQI_to_MA.R'
     'PeakFilter.R'
+    'RT_MZ_rename.R'
     'RTindexing.R'

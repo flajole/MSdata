@@ -127,3 +127,15 @@ setMethod("intMatrix<-", "MSdata",
           })
 
 ##==============================================================================
+
+setGeneric("peakNames", function(msdata, ...) standardGeneric("peakNames"))
+#' @export
+#' @rdname MSdata-class
+setMethod("peakNames", "MSdata", 
+          function(msdata) rownames(msdata@peakData))
+		  
+setGeneric("sampleNames", function(msdata, ...) standardGeneric("sampleNames"))
+#' @export
+#' @rdname MSdata-class
+setMethod("sampleNames", "MSdata", 
+          function(msdata) rownames(msdata@sampleData))
