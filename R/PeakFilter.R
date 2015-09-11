@@ -21,9 +21,9 @@ setGeneric("PeakFilter",
 #' 
 #' @param min.int Filter peaks by total intensity. Mean peak intensity in replicate group 
 #' have to be higher than \code{min.int} value.
-#' @param min.nonNAnum.repgroup Filter peaks with too many missing values. \code{min.number.repgroup} 
+#' @param min.nonNAnum.repgroup Filter peaks with too many missing values. \code{nonNAnum.repgroup} 
 #' is minimal number of non-NA values in replicate group.
-#' @param min.nonNApercent Filter peaks with too many missing values. \code{min.allgroups} 
+#' @param min.nonNApercent Filter peaks with too many missing values. \code{min.nonNApercent} 
 #' is minimal allowed quotient of non-NA values for each peak.
 #' @return \code{\link{MSdata-class}} object without filtered peaks and blank samples
 #' @name PeakFilter
@@ -32,9 +32,9 @@ setGeneric("PeakFilter",
 setMethod("PeakFilter", "MSdata",
           function(msdata, 
                    blanks = NULL, 
-                   above.blank = 2,
-                   min.int = 1000,
-                   min.nonNAnum.repgroup = 3,
+                   above.blank = NULL,
+                   min.int = NULL,
+                   min.nonNAnum.repgroup = NULL,
                    min.nonNApercent = 0.4){
               fold.blank<-NULL #temporary
               msg <- c()

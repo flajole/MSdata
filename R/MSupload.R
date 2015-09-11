@@ -4,7 +4,7 @@
 #' Automatically adds a \code{ReplicationGroup} column in \code{sampleData} table according to group factors combinations.
 #' @param object One of: 
 #' \enumerate{
-#' \item a character vector of length 1 - just a file path name of one .csv or .txt data frame.\cr
+#' \item a character vector of length 1 - just a file path name of one .csv or .txt data frame.
 #' \item a list of paths to three files: matrix of intensities, sample metadata and peak metadata.
 #' }
 #' @param orientation Orientation of table, one of \code{"SamplesInCol"} or \code{"SamplesInRow"}

@@ -5,21 +5,17 @@
 \alias{Norm}
 \title{MSdata normalisation}
 \usage{
-\S4method{Norm}{MSdata}(msdata, method, biomass.list = NULL,
-  ref.cmpd = NULL)
+\S4method{DataNorm}{MSdata}(msdata, method, ref.cmpd = NULL)
 }
 \arguments{
 \item{msdata}{\code{\link{MSdata-class}} object}
 
 \item{method}{Method of normalisation. In each sample data are normalised by one of:\cr
-\code{"Sum"} -  sum concentration of all compounds\cr
-\code{"Median"} - median concentration of all compounds\cr
-\code{"RefCompound"} - concentration of reference compound\cr
-\code{"Biomass"} - sample biomass/volume/etc. \cr}
+\code{"sum"} -  sum concentration of all compounds\cr
+\code{"median"} - median concentration of all compounds\cr
+\code{"refCompound"} - concentration of reference compound}
 
-\item{biomass.list}{For \code{"Biomass"} method, the path to the file containing the simple table with two columns: sample ID and biomasses/volumes/etc.}
-
-\item{ref.cmpd}{For \code{"RefCompound"} method, the name or number of reference compound.}
+\item{ref.cmpd}{For \code{"refCompound"} method, the name or the order number of reference compound.}
 }
 \value{
 \code{\link{MSdata-class}} object with normalised intensity matrix

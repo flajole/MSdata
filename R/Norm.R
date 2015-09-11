@@ -1,48 +1,26 @@
-setGeneric("Norm", 
-           function(msdata, ...) standardGeneric("Norm"))
+setGeneric("DataNorm", 
+           function(msdata, ...) standardGeneric("DataNorm"))
 #' MSdata normalisation
 #'
 #' Sample-wise normalisation methods.
 #' @param msdata \code{\link{MSdata-class}} object
 #' @param method Method of normalisation. In each sample data are normalised by one of:\cr
-#' \code{"Sum"} -  sum concentration of all compounds\cr
-#' \code{"Median"} - median concentration of all compounds\cr
-#' \code{"RefCompound"} - concentration of reference compound\cr
-#' \code{"Biomass"} - sample biomass/volume/etc. \cr
-#' @param biomass.list For \code{"Biomass"} method, the path to the file containing the simple table with two columns: sample ID and biomasses/volumes/etc.
-#' @param ref.cmpd For \code{"RefCompound"} method, the name or number of reference compound.
+#' \code{"sum"} -  sum concentration of all compounds\cr
+#' \code{"median"} - median concentration of all compounds\cr
+#' \code{"refCompound"} - concentration of reference compound
+#' @param ref.cmpd For \code{"refCompound"} method, the name or the order number of reference compound.
 #' 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
 #' @name Norm
 #' @export     	   	
-setMethod("Norm", "MSdata",
+setMethod("DataNorm", "MSdata",
           function(msdata,
                    method,
-                   biomass.list = NULL,
                    ref.cmpd = NULL) {
-              match.arg(method, c("Biomass", "Sum", "Median", "RefCompound"))
+              match.arg(method, c("sum", "median", "refCompound"))
               .intMatrix <- msdata@intMatrix
               
-              if (method == "Biomass") {
-                  if (is.null(biomass.list)) 
-                      stop("Method is set to normalisation by biomass, 
-                           but biomasses list is not selected!")
-                  biomass.table <- suppressWarnings(read.table(biomass.list, row.names = 1, col.names = c("Biomass")))
-                  
-                  miss.samples <- setdiff(colnames(.intMatrix), rownames(biomass.table))  
-                  if (length(miss.samples) > 0)
-                      stop("Not all sample names are found in biomass table!")
-                  
-                  biomass.table <- biomass.table[colnames(.intMatrix), ]  
-                  
-                  masses <- matrix(biomass.table,
-                                   nrow=nrow(.intMatrix), 
-                                   ncol=ncol(.intMatrix), byrow=TRUE)
-                  meanMass <- mean(biomass.table)
-                  .intMatrix <- .intMatrix * meanMass / masses 
-                  msg <- paste0("Data are normalised by biomass; the file used as list:\n", biomass.list)
-                  
-              } else if (method == "Median") {
+              if (method == "median") {
                   medians <- matrix(apply(.intMatrix, 2, median, na.rm = TRUE),
                                     nrow=nrow(.intMatrix), 
                                     ncol=ncol(.intMatrix), 
@@ -51,7 +29,7 @@ setMethod("Norm", "MSdata",
                   .intMatrix <- .intMatrix * meanInt / medians
                   msg <- "Data are normalised by sample median" 
                   
-              } else if (method == "Sum") {
+              } else if (method == "sum") {
                   sums <- matrix(colSums(.intMatrix, na.rm=TRUE),
                                  nrow=nrow(.intMatrix), 
                                  ncol=ncol(.intMatrix), 
@@ -60,11 +38,11 @@ setMethod("Norm", "MSdata",
                   .intMatrix <- .intMatrix * meanInt / sums
                   msg <- "Data are normalised by sample sum" 
                   
-              } else if (method == "RefCompound") {
+              } else if (method == "refCompound") {
                   if (is.null(ref.cmpd)) 
                       stop("Method is set to normalisation by feature, 
                            but reference feature is not selected!")
-						   
+                  
                   if (!(ref.cmpd %in% rownames(.intMatrix)) & !(ref.cmpd %in% 1:nrow(.intMatrix))) {
                       stop("Reference feature is not found!")
                   } else if (ref.cmpd %in% rownames(.intMatrix)) { 
@@ -91,6 +69,6 @@ setMethod("Norm", "MSdata",
                                sampleData = sampleData(msdata),
                                processLog = .processLog)
               
-			  if (method == "RefCompound") msdata <- msdata[-ref.num, ]
+              if (method == "refCompound") msdata <- msdata[-ref.num, ]
               return(msdata)
-              })
+          })

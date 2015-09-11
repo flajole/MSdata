@@ -8,11 +8,15 @@ setGeneric("StandNorm",
 #' Normalisation by standards
 #'
 #' Normalisation by the list of external or internal standards. 
-#' In each sample all the intensities are normalized by sum of standards intensities.
+#' The list of the standards is provided as a file with three columns: compound, m/z, retention time. 
+#' By these MZ and RT values corresponding peaks in dataset are determined 
+#' and their sum intensity is used for normalisation.\cr
 #' Afterwards, standards are excluded from feature list.
 #' @param msdata \code{\link{MSdata-class}} object
 #' @param standards.list The link to the file with the table of standards looking like: compound, m/z, retention time
 #' @param meanInt Mean sum intensity of all the standards (usually, got from previous experiments).
+#' @param mzwindow Range (in ppm) for searching the peak corresponding to a standard from the list.
+#' @param rtwindow Range (in seconds) for searching the peak corresponding to a standard from the list.
 #' @param recalculateMean If \code{TRUE} then \code{meanInt} is not used, but is recalculated from these particular data.
 #' 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
@@ -21,8 +25,10 @@ setGeneric("StandNorm",
 
 setMethod("StandNorm", "MSdata",
           function(msdata, 
-				   standards.list, 
-				   meanInt = 2000, 
+				   standards.list,
+				   mzwindow = 0.01,
+				   rtwindow = 10,
+				   meanInt = 2000,
 				   recalculateMean = FALSE) {
 				   
               .intMatrix <- intMatrix(msdata)

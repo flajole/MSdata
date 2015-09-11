@@ -5,8 +5,8 @@
 \alias{PeakFilter}
 \title{Peak filtering}
 \usage{
-\S4method{PeakFilter}{MSdata}(msdata, blanks = NULL, above.blank = 2,
-  min.int = 1000, min.nonNAnum.repgroup = 3, min.nonNApercent = 0.4)
+\S4method{PeakFilter}{MSdata}(msdata, blanks = NULL, above.blank = NULL,
+  min.int = NULL, min.nonNAnum.repgroup = NULL, min.nonNApercent = 0.4)
 }
 \arguments{
 \item{msdata}{\code{\link{MSdata-class}} object to be filtered}
@@ -24,10 +24,10 @@ Note: if \code{above.blank = 0} then just mean values are compared.}
 \item{min.int}{Filter peaks by total intensity. Mean peak intensity in replicate group
 have to be higher than \code{min.int} value.}
 
-\item{min.nonNAnum.repgroup}{Filter peaks with too many missing values. \code{min.number.repgroup}
+\item{min.nonNAnum.repgroup}{Filter peaks with too many missing values. \code{nonNAnum.repgroup}
 is minimal number of non-NA values in replicate group.}
 
-\item{min.nonNApercent}{Filter peaks with too many missing values. \code{min.allgroups}
+\item{min.nonNApercent}{Filter peaks with too many missing values. \code{min.nonNApercent}
 is minimal allowed quotient of non-NA values for each peak.}
 }
 \value{

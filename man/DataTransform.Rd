@@ -14,8 +14,8 @@
 \code{"log10"} - log10-transformation; \cr
 \code{"log2"} - log2-transformation;\cr
 \code{"glog10"} - generalised log10, tolerant to zeros (zeros are replaced with 1/10 of the minimal value);\cr
-\code{"glog2"} - generalised log2, tolerant to zeros (zeros are replaced with 1/10 of the minimal value); \cr
-\code{"cuberoot"} - cube root transformation \cr}
+\code{"glog2"} - generalised log2, tolerant to zeros (zeros are replaced with 1/10 of the minimal value);\cr
+\code{"cuberoot"} - cube root transformation}
 }
 \value{
 \code{\link{MSdata-class}} object with transformed intensity matrix

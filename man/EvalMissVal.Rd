@@ -5,19 +5,21 @@
 \alias{EvalMissVal}
 \title{Evaluate Missing Values}
 \usage{
-\S4method{EvalMissVal}{MSdata}(msdata, method = "Min", percent = 0.5)
+\S4method{EvalMissVal}{MSdata}(msdata, method = "min", percent = 0.5)
 }
 \arguments{
 \item{msdata}{\code{\link{MSdata-class}}}
 
 \item{method}{Method of evaluation, one of:
-\code{"Min"},\cr
-\code{"FeatureMin"}, \code{"FeatureMean"}, \code{"FeatureMedian"}\cr
-\code{"GausSim"}\cr
-\code{"knn"}\cr
-\code{"bpca"}, \code{"ppca"} or \code{"svdImpute"}}
+\itemize{
+\item \code{"min"}, - certain \code{percent} of minimal intensity throughout all dataset;\cr
+\item \code{"featureMin"}, \code{"featureMean"}, \code{"featureMedian"} - NAs in feature are replaced by corresponding statistics of this feature intensity values;\cr
+\item \code{"GausSim"} - random generation of normally distributed values;\cr
+\item \code{"knn"} - nearest neighbour averaging. \code{\link[impute]{impute.knn}} function is used;\cr
+\item \code{"bpca"}, \code{"ppca"}, \code{"svdImpute"} - imputation based on PCA analysis. \code{\link[pcaMethods]{pca}} function is used.
+}}
 
-\item{percent}{For \code{method = "Min"}. Quotient of minimal value used to replace missing values.}
+\item{percent}{For \code{method = "min"}. Quotient of minimal value used to replace missing values.}
 }
 \description{
 Fill NA positions in data set. See more: \code{\link[pcaMethods]{pca}}

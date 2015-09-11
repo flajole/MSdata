@@ -24,6 +24,7 @@ Collate:
     'MSupload.R'
     'MZindexing.R'
     'Norm.R'
+    'Norm_Biomass.R'
     'Norm_Scaling.R'
     'Norm_Standards.R'
     'Norm_Transform.R'
