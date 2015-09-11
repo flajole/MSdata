@@ -75,6 +75,7 @@ setMethod("EvalMissVal", "MSdata",
 				  msg <- paste0("Missing variables were replaced with PCA-predicted values (", method, " method)")
               }
               .processLog <- paste0(msdata@processLog, "\n\nEvalMissVal:\n", msg)
+			  cat(msg)
               MSdata(intMatrix  = .intMatrix,
                      peakData   = peakData(msdata),
                      sampleData = sampleData(msdata),

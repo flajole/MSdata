@@ -67,7 +67,8 @@ setMethod("StandNorm", "MSdata",
               intMatrix(msdata) <- .intMatrix
               #exclude standard from data matrix
               msdata <- msdata[-standards, ]
-              
-              msdata@processLog <- paste0(msdata@processLog, "/n/nData are normalised by internal standards; the following list of standards is used: /n", standards.list)
+              msg <- paste0("Data are normalised by internal standards")
+              msdata@processLog <- paste0(msdata@processLog, "\n\n", msg, "; the following list of standards is used: \n", standards.list)
+			  cat(msg)
               return(msdata)
           })

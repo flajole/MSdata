@@ -72,7 +72,8 @@ setMethod("MSupload", "character",
 			  
               if (zeros.as.NA) .intMatrix[.intMatrix==0] <- NA
               #.sampleData$ReplicateGroup <- RepGroup(.sampleData)
-              .processLog <- paste0("Data uploaded from the file:\n", object, "\n\n")
+              .processLog <- paste0("Data uploaded from the file:\n", object)
+			  cat(.processLog)
               MSdata(intMatrix  = .intMatrix,
                      peakData   = .peakData,
                      sampleData = .sampleData,
@@ -151,6 +152,7 @@ setMethod("MSupload", "list",
                                     object$intFile, " - intensity matrix\n",
                                     object$sampleFile, " - sample metadata\n",
                                     object$peakFile, " - peak metadata\n\n")
+			  cat(.processLog)
               MSdata(intMatrix  = .intMatrix,
                      peakData   = .peakData,
                      sampleData = .sampleData,

@@ -28,13 +28,17 @@ setMethod("SetRepGroup", "MSdata",
               if (!is.null(repFac)) {
                   if (repFac %in% names(.sampleData)) {
                      names(.sampleData)[names(.sampleData)==repFac] <- "ReplicationGroup"
+					 msg <- ("\n\n", repFac, " column in sampleData is set as ReplicationGroup column")
                   } else {
                       stop("Stated replication factor is not found is sample data.")
                   }
               } else {
                   .sampleData$ReplicationGroup <- RepGroup(.sampleData, impFac)
+				  msg <- "\n\nReplicationGroup column is created in sampleData"
               }
               sampleData(msdata) <- .sampleData
+			  msdata@processLog <- paste0(msgata@processLog, msg)
+			  cat(msg)
               return(msdata)
           })
 		  

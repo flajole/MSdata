@@ -37,7 +37,6 @@ setMethod("PeakFilter", "MSdata",
                    min.nonNAnum.repgroup = NULL,
                    min.nonNApercent = 0.4){
               fold.blank<-NULL #temporary
-              msg <- c()
               .intMatrix <- intMatrix(msdata)
               se <- function(x) sqrt(var(x, na.rm = TRUE)/length(na.omit(x)))
               repapply <- function(foo) {
@@ -98,11 +97,11 @@ setMethod("PeakFilter", "MSdata",
               
               
               if (dim(filt)[3] == 0) {
-                  msg <- paste0(msg, "\n\nNo data filtering was applied");
+                  msg <- "No data filtering was applied";
               } else {
                   filtered.peaks <- apply(apply(filt, 2, apply, 1, all, na.rm = FALSE), 2, any, na.rm = FALSE)
                   msdata <- msdata[filtered.peaks, ]
-                  msg <- paste0(msg, "\n\nFiltering: ", sum(!filtered.peaks), " are filtered")
+                  msg <- paste0(msg, "Filtering: ", sum(!filtered.peaks), " are filtered")
               }
               
               if (!is.null(blanks)) {
@@ -110,7 +109,8 @@ setMethod("PeakFilter", "MSdata",
                   msg <- paste0(msg, "\nBlank samples has been removed from dataset.")
               }
               
-              msdata@processLog <- paste0(msdata@processLog, msg)
+              msdata@processLog <- paste0(msdata@processLog, "\n\n", msg)
+			  cat(msg)
               return(msdata)
           })
 
@@ -213,23 +213,24 @@ setMethod("BasicFilter", "MSdata",
               
               if(npks < 250){ # reduce 5%
                   remain <- rk < npks*0.95;
-                  msg <- paste("Reduce 5% features (", sum(!remain), ") based on", nm);
+                  msg <- paste0("Reduce 5% features (", sum(!remain), ") based on ", nm);
               } else if(npks < 500){ # reduce 10%
                   remain <- rk < npks*0.9;
-                  msg <- paste("Reduce 10% features (", sum(!remain), ") based on", nm);
+                  msg <- paste0("Reduce 10% features (", sum(!remain), ") based on ", nm);
               } else if(npks < 1000){ # reduce 25%
                   remain <- rk < npks*0.75;
-                  msg <- paste("Reduce 25% features (", sum(!remain), ") based on", nm);
+                  msg <- paste0("Reduce 25% features (", sum(!remain), ") based on ", nm);
               } else{ # reduce 40%, if still over 5000, then only use top 5000
                   remain <- rk < npks*0.6;
-                  msg <- paste("Reduce 40% features (", sum(!remain), ") based on", nm);
+                  msg <- paste0("Reduce 40% features (", sum(!remain), ") based on ", nm);
                   if(sum(remain) > 5000){
                       remain <- rk < 5000;
-                      msg <- paste("Reduced to 5000 features based on", nm);
+                      msg <- paste("Reduced to 5000 features based on ", nm);
                   }
               }
               
               msdata <- msdata[remain, ]
               msdata@processLog <- paste0(msdata@processLog, "\n\n", msg)
+			  cat(msg)
               return(msdata)
           })

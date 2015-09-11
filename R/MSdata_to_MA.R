@@ -84,5 +84,6 @@ setMethod("MSdata_to_MA", "MSdata",
               dataSet$norm <- t(conc);
               dataSet$cls <- as.factor(cls.lbl)
               dataSet$cls.num <- length(levels(dataSet$cls))
+			  cat("MetaboAnalyst dataSet object is created")
               return(dataSet);
           })

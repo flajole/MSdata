@@ -35,8 +35,9 @@ setMethod("DataScaling", "MSdata",
 			  .intMatrix <- t(.intMatrix)
               #rownames(.intMatrix) <- rownames(intMatrix(msdata))
               #colnames(.intMatrix) <- colnames(intMatrix(msdata))
-              
-              .processLog <- paste0(msdata@processLog, "Data are rescaled by ", method, " scaling\n")
+              msg<- paste0("Data are rescaled by ", method, " scaling")
+              .processLog <- paste0(msdata@processLog, "\n\n", msg)
+			  cat(msg)
               MSdata(intMatrix  = .intMatrix,
                      peakData   = peakData(msdata),
                      sampleData = sampleData(msdata),

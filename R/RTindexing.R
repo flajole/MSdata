@@ -51,11 +51,10 @@ setMethod("RTindexing", "MSdata",
               c.a <- sapply(peak.rt, function(x) coef.a[sum(x > targeted.peaks) + 1])
               c.b <- sapply(peak.rt, function(x) coef.b[sum(x > targeted.peaks) + 1])
               .peakData["RT"] <- peak.rt * c.a + c.b
-              .processLog <- c(object@processLog,
-                                "\n\nRetention time is indexed by internal standards list ",
-                                targets.list, "\n",
-                                paste(readLines(targets.list, warn = FALSE), collapse="\n"))
-
+              msg <- paste0("Retention time is indexed by internal standards list ", targets.list,
+							"\n", paste(readLines(targets.list, warn = FALSE), collapse="\n"))
+			  .processLog <- paste(object@processLog,"\n\n", msg)
+			  cat(msg)
               MSdata(intMatrix  = intMatrix(object),
                      peakData   = .peakData,
                      sampleData = sampleData(object),

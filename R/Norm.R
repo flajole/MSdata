@@ -63,7 +63,7 @@ setMethod("DataNorm", "MSdata",
               } 
               
               .processLog <- paste0(msdata@processLog, "\n\n Normalisation:\n", msg)
-              
+              cat(msg)
               msdata <- MSdata(intMatrix  = .intMatrix,
                                peakData   = peakData(msdata),
                                sampleData = sampleData(msdata),
