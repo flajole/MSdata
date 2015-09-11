@@ -21,6 +21,7 @@ Collate:
     'EvalMissVal.R'
     'MQI_to_MA.R'
     'MSdata_to_MA.R'
+    'MSoutput.R'
     'MSupload.R'
     'MZindexing.R'
     'Norm.R'
