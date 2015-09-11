@@ -7,7 +7,8 @@
 \title{Convert QI to MetaboAnalyst}
 \usage{
 MQI_to_MA(path = getwd(), abundance = "Raw",
-  compoundID = "Accepted Compound", facNames = NULL, unite_neg_pos = TRUE)
+  compoundID = "Accepted Compound ID", facNames = NULL,
+  unite_neg_pos = TRUE)
 
 PQI_to_MA(path = getwd(), abundance = "Raw", facNames = NULL,
   compoundID = "shortDescription")
