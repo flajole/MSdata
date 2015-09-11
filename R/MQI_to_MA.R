@@ -42,7 +42,7 @@ NULL
 
 MQI_to_MA <- function(path = getwd(),
                       abundance = "Raw",
-					  compoundID = "Accepted Compound",
+					  compoundID = "Accepted Compound ID",
                       facNames = NULL,
                       unite_neg_pos = TRUE) {
 
