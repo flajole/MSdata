@@ -5,21 +5,21 @@
 \alias{EvalMissVal}
 \title{Evaluate Missing Values}
 \usage{
-\S4method{EvalMissVal}{MSdata}(msdata, method = "Min", ...)
+\S4method{EvalMissVal}{MSdata}(msdata, method = "Min", percent = 0.5)
 }
 \arguments{
 \item{msdata}{\code{\link{MSdata-class}}}
 
 \item{method}{Method of evaluation, one of:
-"Min", "FeatureMin", "FeatureMean", "FeatureMedian", "PCA", "GausSim"}
+\code{"Min"},\cr
+\code{"FeatureMin"}, \code{"FeatureMean"}, \code{"FeatureMedian"}\cr
+\code{"GausSim"}\cr
+\code{"knn"}\cr
+\code{"bpca"}, \code{"ppca"} or \code{"svdImpute"}}
 
-\item{...}{Other optional parameters:
-\itemize{
-\item  \code{pcamethods} - character vector containing the name of applied PCA method, one of:
-
-}}
+\item{percent}{For \code{method = "Min"}. Quotient of minimal value used to replace missing values.}
 }
 \description{
-Fill NA positions in data set.
+Fill NA positions in data set. See more: \code{\link[pcaMethods]{pca}}
 }
 

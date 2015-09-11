@@ -11,7 +11,9 @@ BugReports: http://github.com/flajole/MSdata/issues
 Authors@R: person("Dmitry", "Zubkov", email = "zubkov@mpimp-golm.de", role = c("aut", "cre"))
 Imports:
     abind,
-    pcaMethods
+    pcaMethods,
+    impute,
+    methods
 License: GPL-3
 LazyData: true
 Collate:
@@ -29,3 +31,4 @@ Collate:
     'PeakFilter.R'
     'RT_MZ_rename.R'
     'RTindexing.R'
+    'SetRepGroup.R'

@@ -27,10 +27,10 @@
 #' but they are cut starting with "OS=".
 #'
 #' @examples
-#' PQI_to_MA("//mpimp-golm/user/Homes/Zubkov/QI_data")
-#' PQI_to_MA("\\\\mpimp-golm\\user\\Homes\\Zubkov\\QI_data")
-#' PQI_to_MA("C:/QI_data", abundance = "Raw", compoundID = "Accession")
-#' MQI_to_MA("C:/QI_data", facNames = c("Phenotype", "Treatment", "Time"), unite_neg_pos = FALSE)
+#' # PQI_to_MA("//mpimp-golm/user/Homes/Zubkov/QI_data")
+#' # PQI_to_MA("\\\\mpimp-golm\\user\\Homes\\Zubkov\\QI_data")
+#' # PQI_to_MA("C:/QI_data", abundance = "Raw", compoundID = "Accession")
+#' # MQI_to_MA("C:/QI_data", facNames = c("Phenotype", "Treatment", "Time"), unite_neg_pos = FALSE)
 #' @name QI_to_MA
 NULL
 

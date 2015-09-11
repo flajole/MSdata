@@ -19,11 +19,11 @@
 \code{\link{MSdata-class}} object with normalised intensity matrix
 }
 \description{
-This function realizes two steps: mean-centring and scaling.
-Mean-centring means that - for each feature (peak/compound) all samples intensities are considered
-as differences from the mean intensity of this feature.
+This function realizes two steps: mean-centring and scaling.\cr
+Mean-centring means that for each feature (peak/compound) all samples intensities are considered
+as differences from the mean intensity of this feature.\cr
 Scaling means that these differences are standardized for all the features by dividing by
-standard deviation, or range, or another measure of variance.
+standard deviation, or range, or another measure of variance.\cr
 Therefore, after scaling all the features have mean intensity 0 and corresponding variance measure 1.
 }
 
