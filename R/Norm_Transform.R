@@ -37,11 +37,10 @@ setMethod("DataTransform", "MSdata",
                   msg <- "Cube Root Transformation"
               }
 			  .intMatrix <- t(.intMatrix)
-              .processLog <- paste0(msdata@processLog, "Data are transformed by ", msg, "\n")
-              MSdata(intMatrix  = .intMatrix,
-                     peakData   = peakData(msdata),
-                     sampleData = sampleData(msdata),
-                     processLog = .processLog)
+			  intMatrix(msdata) <- .intMatrix
+              processLog(msdata) <- paste0("Data are transformed by ", msg)
+			  cat(msg)
+              return(msdata)
           })
 
 glog2 <- function(x, min.val){

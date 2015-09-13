@@ -53,12 +53,10 @@ setMethod("RTindexing", "MSdata",
               .peakData["RT"] <- peak.rt * c.a + c.b
               msg <- paste0("Retention time is indexed by internal standards list ", targets.list,
 							"\n", paste(readLines(targets.list, warn = FALSE), collapse="\n"))
-			  .processLog <- paste(object@processLog,"\n\n", msg)
+			  peakData(msdata) <- .peakData
+			  processLog(msdata) <- msg
 			  cat(msg)
-              MSdata(intMatrix  = intMatrix(object),
-                     peakData   = .peakData,
-                     sampleData = sampleData(object),
-                     processLog = .processLog)
+			  return(msdata)
           })
 		  
 ## Retention time indexing in xcmsSet data, with possibility to rewrite raw files

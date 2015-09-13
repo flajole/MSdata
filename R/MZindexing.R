@@ -53,10 +53,9 @@ setMethod("MZindexing", "MSdata",
               .peakData["MZ"] <- peak.mz * c.a + c.b
 			  msg <- paste0("Mass-charge is indexed by internal standards list ", targets.list,
 						    "\n", paste(readLines(targets.list, warn = FALSE), collapse="\n"))
-              .processLog <- c(object@processLog, "\n\n", msg)
+              
+			  peakData(msdata) <- .peakData
+			  processLog(msdata) <- msg
 			  cat(msg)
-              MSdata(intMatrix  = intMatrix(object),
-                     peakData   = .peakData,
-                     sampleData = sampleData(object),
-                     processLog = .processLog)
+			  return(msdata)
           })

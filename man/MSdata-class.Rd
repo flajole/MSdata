@@ -9,6 +9,8 @@
 \alias{peakData,MSdata-method}
 \alias{peakData<-,MSdata-method}
 \alias{peakNames,MSdata-method}
+\alias{processLog,MSdata-method}
+\alias{processLog<-,MSdata-method}
 \alias{sampleData,MSdata-method}
 \alias{sampleData<-,MSdata-method}
 \alias{sampleNames,MSdata-method}
@@ -25,6 +27,10 @@
 \S4method{intMatrix}{MSdata}(msdata)
 
 \S4method{intMatrix}{MSdata}(msdata) <- value
+
+\S4method{processLog}{MSdata}(msdata)
+
+\S4method{processLog}{MSdata}(msdata) <- value
 
 \S4method{peakNames}{MSdata}(msdata)
 

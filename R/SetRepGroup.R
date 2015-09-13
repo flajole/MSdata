@@ -37,7 +37,7 @@ setMethod("SetRepGroup", "MSdata",
 				  msg <- "ReplicationGroup column is created in sampleData"
               }
               sampleData(msdata) <- .sampleData
-			  msdata@processLog <- paste0(msgata@processLog, "\n\n", msg)
+			  processLog(msdata) <- msg
 			  cat(msg)
               return(msdata)
           })

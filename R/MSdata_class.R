@@ -126,6 +126,23 @@ setMethod("intMatrix<-", "MSdata",
                   return(msdata)
           })
 
+## Process Log accessors and addition methods
+setGeneric("processLog", function(msdata, ...) standardGeneric("processLog"))
+#' @export
+#' @rdname MSdata-class
+setMethod("processLog", "MSdata", 
+          function(msdata) cat(msdata@processLog))
+
+setGeneric("processLog<-",
+           function(msdata, value) standardGeneric("processLog<-"))
+#' @export
+#' @rdname MSdata-class
+setMethod("processLog<-", "MSdata",
+          function(msdata, value) {
+              msdata@processLog <- paste0(msdata@processLog, "\n\n", value)
+              if (validObject(msdata))
+                  return(msdata)
+          })
 ##==============================================================================
 
 setGeneric("peakNames", function(msdata, ...) standardGeneric("peakNames"))

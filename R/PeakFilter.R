@@ -109,7 +109,7 @@ setMethod("PeakFilter", "MSdata",
                   msg <- paste0(msg, "\nBlank samples has been removed from dataset.")
               }
               
-              msdata@processLog <- paste0(msdata@processLog, "\n\n", msg)
+              processLog(msdata) <- msg
 			  cat(msg)
               return(msdata)
           })
@@ -175,7 +175,8 @@ setMethod("BasicFilter", "MSdata",
               if (method == "none") {
                   if (npks <= 2000) {
                       msg <- "No data filtering was applied"
-                      msdata@processLog <- paste0(msdata@processLog, "\n\n", msg)
+                      processLog(msdata) <- msg
+					  cat(msg)
                       return(msdata)
                   } else 
                       method <- "iqr"
@@ -230,7 +231,7 @@ setMethod("BasicFilter", "MSdata",
               }
               
               msdata <- msdata[remain, ]
-              msdata@processLog <- paste0(msdata@processLog, "\n\n", msg)
+              processLog(msdata) <- msg
 			  cat(msg)
               return(msdata)
           })

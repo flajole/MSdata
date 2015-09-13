@@ -36,10 +36,9 @@ setMethod("BiomassNorm", "MSdata",
                                ncol=ncol(.intMatrix), byrow=TRUE)
               meanMass <- mean(biomass.table)
               .intMatrix <- .intMatrix * meanMass / masses 
-              .processLog <- paste0(msdata@processLog, "\n\n Normalisation:\n", msg)
-              cat(msg)
-              MSdata(intMatrix  = .intMatrix,
-                               peakData   = peakData(msdata),
-                               sampleData = sampleData(msdata),
-                               processLog = .processLog)
+			  
+			  intMatrix(msdata) <- .intMatrix
+              processLog(msdata) <- paste0("Normalisation:\n", msg)
+			  cat(msg)
+              return(msdata)
           })
