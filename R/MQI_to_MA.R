@@ -60,8 +60,9 @@ MQI_to_MA <- function(path = getwd(),
         tab <- in.tab
         
         idcmpd <- pmatch(compoundID, tab[3, ])
+        accmpd <- pmatch("Accepted Compound ID", tab[3, ])
         noempty2 <- which(tab[2, ] != "")
-        noempty2 <- c(noempty2, idcmpd)
+        noempty2 <- c(noempty2, ncol(tab))
         
         # Filling the sample names
         for (i in 1:(length(noempty2) - 1)) {
@@ -74,7 +75,7 @@ MQI_to_MA <- function(path = getwd(),
         if (abundance == "Normalised") {
             tab <- tab[c(idcmpd, normstart:(rawstart - 1))]
         } else {
-            tab <- tab[c(idcmpd, rawstart:(idcmpd - 1))]
+            tab <- tab[c(idcmpd, rawstart:(accmpd - 1))]
         }
         
         tab[1,]  <- tab[3,]
