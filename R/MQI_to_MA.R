@@ -56,7 +56,24 @@ MQI_to_MA <- function(path = getwd(),
 	facNums <- integer()
 	
     for (j in 1:length(rawfiles)) {
-        in.tab <- read.csv(rawfiles[j], stringsAsFactors = FALSE, header = FALSE)
+        format.check <- readLines(rawfiles[j], n = 10)
+        if (grepl(";", format.check[1]) == TRUE) {
+            sep <- ";"
+            dots <- all(grepl("\\.", format.check[4:10]))
+            commas <- all(grepl(",", format.check[4:10]))
+            if (all(dots) & !all(commas)) {
+                dec <- "."
+            } else {
+                dec <- ","
+            }
+        } else {
+            sep <- ","
+            dec <- "."
+        }
+        in.tab <- read.table(rawfiles[j],
+                             sep = sep, dec = dec,
+                             stringsAsFactors = FALSE,
+                             header = FALSE)
         tab <- in.tab
         
         idcmpd <- pmatch(compoundID, tab[3, ])
