@@ -156,3 +156,15 @@ setGeneric("sampleNames", function(msdata, ...) standardGeneric("sampleNames"))
 #' @rdname MSdata-class
 setMethod("sampleNames", "MSdata", 
           function(msdata) rownames(msdata@sampleData))
+
+setGeneric("npeak", function(msdata, ...) standardGeneric("npeak"))
+#' @export
+#' @rdname MSdata-class
+setMethod("npeak", "MSdata", 
+          function(msdata) nrow(msdata@intMatrix))
+
+setGeneric("nsmpl", function(msdata, ...) standardGeneric("nsmpl"))
+#' @export
+#' @rdname MSdata-class
+setMethod("nsmpl", "MSdata", 
+          function(msdata) ncol(msdata@intMatrix))
