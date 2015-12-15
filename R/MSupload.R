@@ -33,19 +33,35 @@ setMethod("MSupload", "character",
                    peakNames = TRUE) {
               
               match.arg(orientation, c("SamplesInCol", "SamplesInRow"))
-              fileFormat <- substr(object, nchar(object)-2, nchar(object))
-              if (fileFormat == "txt"){
-                  tab <- read.table(object, header=FALSE, check.names=F, colClasses = "character");
-              } else if (fileFormat == "csv") { # note, read.csv is more than read.table with sep=","
-                  tab <- read.csv(object, header=FALSE, check.names=F, colClasses = "character");
-              } else{
-                  stop("File format is not .txt or .csv")
-              }    
+              
+              format.check <- readLines(object, n = 10)
+              
+              if (all(grepl(";", format.check))) {
+                  sep <- ";"
+              } else if (all(grepl(",", format.check))) {
+                  sep <- ","
+              } else {
+                  sep <- ""
+              }
+              
+              tab <- read.table(object,
+                                sep = sep,
+                                header = FALSE, 
+                                check.names = FALSE, 
+                                stringsAsFactors = FALSE,
+                                colClasses = "character",
+                                comment.char = "");
               
               tab <- as.matrix(tab)
+              
               if (orientation == "SamplesInRow") tab <- t(tab)
-              .sampleData <- data.frame(t(tab[ (1:sampleDataLines), -(1:peakDataLines)]))
-              .peakData   <- data.frame(  tab[-(1:sampleDataLines),  (1:peakDataLines)] )
+              if (sampleDataLines == 1) {
+                  .sampleData <- data.frame(tab[ (1:sampleDataLines), -(1:peakDataLines)])
+              } else {
+                  .sampleData <- data.frame(t(tab[ (1:sampleDataLines), -(1:peakDataLines)]))
+              }
+              
+              .peakData   <- data.frame(tab[-(1:sampleDataLines),  (1:peakDataLines)])
               
               names(.sampleData) <- tab[1:sampleDataLines, peakDataLines]
               names(.peakData)   <- tab[sampleDataLines, 1:peakDataLines]
@@ -65,6 +81,7 @@ setMethod("MSupload", "character",
               }
               
               .intMatrix <- tab[-(1:sampleDataLines), -(1:peakDataLines)]
+              .intMatrix <- apply(.intMatrix, 2, gsub, pattern = ",", replacement = ".")
               class(.intMatrix) <- "numeric"
               
               rownames(.intMatrix) <- rownames(.peakData)

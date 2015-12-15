@@ -31,10 +31,10 @@ setMethod("BiomassNorm", "MSdata",
 				stop("Biomass list is neither a factor name in sample data nor existing file path.")
 			  }
               
-              masses <- matrix(biomass.table,
+              masses <- matrix(biomass.table[[1]],
                                nrow=nrow(.intMatrix), 
                                ncol=ncol(.intMatrix), byrow=TRUE)
-              meanMass <- mean(biomass.table)
+              meanMass <- mean(biomass.table[[1]])
               .intMatrix <- .intMatrix * meanMass / masses 
 			  
 			  intMatrix(msdata) <- .intMatrix
