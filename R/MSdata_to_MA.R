@@ -37,6 +37,9 @@ setMethod("MSdata_to_MA", "MSdata",
               cls.lbl <- dataSet$facA;
               dataSet$cls <- as.factor(cls.lbl)
               
+              dataSet <- SetColor(dataSet, msdata = msdata, fac = dataSet$facA.lbl)
+              dataSet <- SetShape(dataSet, msdata = msdata, fac = dataSet$facA.lbl)
+              
               if (!is.null(facB)) {
                   dataSet$format <- "colts";
                   facB.match <- charmatch(facB, names(msdata@sampleData))
