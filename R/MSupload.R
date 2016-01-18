@@ -56,12 +56,12 @@ setMethod("MSupload", "character",
               
               if (orientation == "SamplesInRow") tab <- t(tab)
               if (sampleDataLines == 1) {
-                  .sampleData <- data.frame(tab[ (1:sampleDataLines), -(1:peakDataLines)])
+                  .sampleData <- data.frame(tab[ (1:sampleDataLines), -(1:peakDataLines)], stringsAsFactors = FALSE)
               } else {
-                  .sampleData <- data.frame(t(tab[ (1:sampleDataLines), -(1:peakDataLines)]))
+                  .sampleData <- data.frame(t(tab[ (1:sampleDataLines), -(1:peakDataLines)]), stringsAsFactors = FALSE)
               }
               
-              .peakData   <- data.frame(tab[-(1:sampleDataLines),  (1:peakDataLines)])
+              .peakData   <- data.frame(tab[-(1:sampleDataLines),  (1:peakDataLines)], stringsAsFactors = FALSE)
               
               names(.sampleData) <- tab[1:sampleDataLines, peakDataLines]
               names(.peakData)   <- tab[sampleDataLines, 1:peakDataLines]
