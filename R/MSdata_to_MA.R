@@ -30,9 +30,10 @@ setMethod("MSdata_to_MA", "MSdata",
                   stop("Factor ", facA, " is not found. Please, check sample data.");
               if (facA.match == 0)
                   stop("Multiple factors matching ", facA, " are found. Please, check sample data.");
-              facA <- names(msdata@sampleData)[facA.match]
-              dataSet$facA.lbl <- facA;
-              dataSet$facA <- as.factor(msdata@sampleData[[facA]]);
+              facA <- as.factor(msdata@sampleData[[facA.match]])
+              facA <- factor(facA, facA[sort(match(levels(facA), facA))])
+              dataSet$facA.lbl <- names(msdata@sampleData)[facA.match];
+              dataSet$facA <- facA;
               cls.lbl <- dataSet$facA;
               dataSet$cls <- as.factor(cls.lbl)
               
@@ -43,9 +44,10 @@ setMethod("MSdata_to_MA", "MSdata",
                       stop("Factor ", facB, " is not found. Please, check sample data.");
                   if (facB.match == 0)
                       stop("Multiple factors matching ", facB, " are found. Please, check sample data.");
-                  facB <- names(msdata@sampleData)[facB.match]
-                  dataSet$facB.lbl <- facB;
-                  dataSet$facB <- as.factor(msdata@sampleData[[facB]]);
+                  facB <- as.factor(msdata@sampleData[[facB.match]])
+                  facB <- factor(facB, facB[sort(match(levels(facB), facB))])
+                  dataSet$facB.lbl <- names(msdata@sampleData)[facB.match];
+                  dataSet$facB <- facB;
               }
               
               if(dataSet$design.type == "time"){
