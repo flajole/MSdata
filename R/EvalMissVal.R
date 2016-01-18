@@ -34,7 +34,7 @@ setMethod("EvalMissVal", "MSdata",
                   msg <- "Missing variables were replaced with a Gaussian simulated value."
                   
               } else if (method == "min") {
-                  .intMatrix[is.na(.intMatrix)] <- percent * min(.intMatrix)
+                  .intMatrix[is.na(.intMatrix)] <- percent * min(.intMatrix, na.rm = TRUE)
                   msg <- "Missing variables were replaced with a small value."
                   
               } else if (method == "featureMin") {
