@@ -25,8 +25,12 @@ setMethod("MSdata_to_MA", "MSdata",
               dataSet$paired <- FALSE
               dataSet$combined.method <- TRUE
               
-              if (is.na(match(facA, names(msdata@sampleData))))
+              facA.match <- charmatch(facA, names(msdata@sampleData))
+              if (is.na(facA.match))
                   stop("Factor ", facA, " is not found. Please, check sample data.");
+              if (facA.match == 0)
+                  stop("Multiple factors matching ", facA, " are found. Please, check sample data.");
+              facA <- names(msdata@sampleData)[facA.match]
               dataSet$facA.lbl <- facA;
               dataSet$facA <- as.factor(msdata@sampleData[[facA]]);
               cls.lbl <- dataSet$facA;
@@ -34,8 +38,12 @@ setMethod("MSdata_to_MA", "MSdata",
               
               if (!is.null(facB)) {
                   dataSet$format <- "colts";
-                  if (is.na(match(facB, names(msdata@sampleData))))
+                  facB.match <- charmatch(facB, names(msdata@sampleData))
+                  if (is.na(facB.match))
                       stop("Factor ", facB, " is not found. Please, check sample data.");
+                  if (facB.match == 0)
+                      stop("Multiple factors matching ", facB, " are found. Please, check sample data.");
+                  facB <- names(msdata@sampleData)[facB.match]
                   dataSet$facB.lbl <- facB;
                   dataSet$facB <- as.factor(msdata@sampleData[[facB]]);
               }
@@ -48,8 +56,8 @@ setMethod("MSdata_to_MA", "MSdata",
                   }else if(tolower(facB) == "time"){
                       dataSet$time.lbl <- "facB";
                   }else{
-                      Warning("No time points found in your data");
-                      Warning("The time points group must be labeled as \"Time\"");
+                      warning("No time points found in your data");
+                      warning("The time points group must be labeled as \"Time\"");
 					  dataSet$design.type <- "regular"
                   }
               }
