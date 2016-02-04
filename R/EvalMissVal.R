@@ -16,6 +16,7 @@ setGeneric("EvalMissVal",
 #' @param percent For \code{method = "min"}. Quotient of minimal value used to replace missing values.
 #' @include MSdata_class.R
 #' @name EvalMissVal
+#' @seealso \code{\link{NoiseGen}} 
 #' @export
 setMethod("EvalMissVal", "MSdata",
           function(msdata, 
@@ -23,10 +24,25 @@ setMethod("EvalMissVal", "MSdata",
 				   percent = 0.5) {
               .intMatrix <- msdata@intMatrix
               npks <- nrow(.intMatrix)
-              match.arg(method, c("min", "featureMin", "featureMean", "featureMedian", 
-								  "PCA", "GausSim", "knn", "bpca", "ppca", "svdImpute"))
+              match.arg(method, c("min", "featureMin", "featureMean", "featureMedian", "GausSim", "knn", "bpca", "ppca", "svdImpute"), several.ok = T)
               
-              if (method == "GausSim") {
+              pcas <- c("ppca", "bpca", "svdImpute")
+              
+              if (any(method %in% pcas) & !all(pcas %in% method)) {
+                  stop("Only ppca, bpca and svdImpute methods can be chosen together")
+                  
+              } else if (any(method %in% c("ppca", "bpca", "svdImpute"))) {
+                  logint <- log2(.intMatrix)
+                  pc <- lapply(method,
+                               function(meth) t(pcaMethods::completeObs(pcaMethods::pca(t(logint), center = TRUE, method=meth))))
+                  #knn <- impute::impute.knn(t(centint))$data
+                  imp <- sapply(pc, '[', is.na(.intMatrix))
+                  # back transformation and mean
+                  imp <- apply(imp^2, 1, tukey)
+                  .intMatrix[is.na(.intMatrix)] <- imp
+                  
+                  msg <- paste0("Missing variables were replaced with PCA-predicted values (", paste(method, collapse = "/"), " method)")
+              } else if (method == "GausSim") {
 				  Mean <- mean(.intMatrix, na.rm = T)
 				  Sd <- sd(.intMatrix, na.rm = T)
                   randomset <- as.integer(rnorm(n = sum(is.na(.intMatrix)), mean = Mean, sd = Sd))
@@ -34,12 +50,12 @@ setMethod("EvalMissVal", "MSdata",
                   msg <- "Missing variables were replaced with a Gaussian simulated value."
                   
               } else if (method == "min") {
-                  .intMatrix[is.na(.intMatrix)] <- percent * min(.intMatrix, na.rm = TRUE)
+                  .intMatrix[is.na(.intMatrix)] <- percent * min(abs(.intMatrix), na.rm = TRUE)
                   msg <- "Missing variables were replaced with a small value."
                   
               } else if (method == "featureMin") {
                   for (i in 1:npks) {
-                      pkmin <- min(.intMatrix[i, ], na.rm = T);
+                      pkmin <- min(abs(.intMatrix[i, ]), na.rm = T);
                       .intMatrix[i, ][is.na(.intMatrix[i, ])] <- pkmin
                   }
                   msg <- "Missing variables were replaced with the half of minimum values for each feature column."
@@ -62,20 +78,58 @@ setMethod("EvalMissVal", "MSdata",
 				 .intMatrix <- impute::impute.knn(.intMatrix)$data
 				 msg <- "Missing variables were replaced with KNN-predicted values."
 				 
-			  }	else if (method %in% c("ppca", "bpca", "svdImpute")) {
-				   
-				  .intMatrix <- pcaMethods::completeObs(pcaMethods::pca(.intMatrix, nPcs = 5, center = TRUE, method = method))
-                  # log2 and mean-centering
-                  # pc <- log2(.intMatrix)
-                  # pc <- lapply(pcamethod, function(x) pcaMethods::completeObs(pca(pc, nPcs=3, center = TRUE, method=x)))
-                  # # back transformation
-                  # pc <- 2 ^ (rowMeans(sapply(pc, '[', is.na(.intMatrix))))
-                  # .intMatrix[is.na(.intMatrix)] <- rowMeans(sapply(allpc, '[', is.na(.intMatrix)))
-				  
-				  msg <- paste0("Missing variables were replaced with PCA-predicted values (", method, " method)")
-              }
+			  }
 			  intMatrix(msdata) <- .intMatrix
               processLog(msdata) <- paste0("EvalMissVal:\n", msg)
 			  cat(msg)
+              return(msdata)
+          })
+
+
+
+#' Noise Generator
+#' 
+#' Generates background signal in replicate groups completely filled with missing values (NAs).
+#' To estimate global noise, the median [M] and the 95% quantile [max]
+#' are computed for replication groups with less than a half of measurements (minority rule).
+#' The standard error [SE] is estimated as 95% quantile for all combinations with
+#' more than a half of measurements (majority rule) revealing a groupwise maximum peak height of
+#' less than [max].
+#' The resulting global noise is  considered as [M ± SE] (as mean and SE) and used to random
+#' generate values from a normal distribution constrained with the global noise parameter.
+#' 
+#' @param msdata \code{\link{MSdata-class}}
+#' @include MSdata_class.R
+#' @name NoiseGen
+#' @seealso \code{\link{EvalMissVal}}
+#' @export
+
+
+setGeneric("NoiseGen", 
+           function(msdata, ...) standardGeneric("NoiseGen"))
+
+setMethod("NoiseGen", "MSdata",
+          function(msdata) {
+              .intMatrix <- intMatrix(msdata)
+              if (is.null(sampleData(msdata)$ReplicationGroup)) {
+                  stop("Set replication group factor first (for details see ?SetRepGroup)")
+              }
+
+              reps <- sampleData(msdata)$ReplicationGroup
+              
+              notna <- repapply(msdata, function(group) sum(!is.na(group)))
+              suppressWarnings(maxint <- repapply(msdata, max, na.rm=T))
+              repsize <- repapply(length, msdata)
+              noise.mean <- median(.intMatrix[notna <= repsize%/%2], na.rm=T)
+              uplim <- quantile(na.omit(.intMatrix[notna <= 2]), 0.95, na.rm=T)
+              noise.se <- quantile(.intMatrix[(notna > repsize - repsize%/%2) & (maxint < uplim)], 0.95, na.rm=T)
+              
+              noise <- rnorm(sum(notna == 0), noise.mean, noise.se)
+              while(any(noise < 0)) {
+                  noise[noise <= 0] <- rnorm(sum(noise <= 0),  noise.mean, noise.se)
+              }
+              
+              .intMatrix[notna == 0] <- noise
+              intMatrix(msdata) <- .intMatrix
               return(msdata)
           })
