@@ -37,6 +37,7 @@ setMethod("PeakFilter", "MSdata",
                    min.nonNAnum.repgroup = NULL,
                    min.nonNApercent = 0.4){
               fold.blank<-NULL #temporary
+              msg <- character()
               .intMatrix <- intMatrix(msdata)
               se <- function(x) sqrt(var(x, na.rm = TRUE)/length(na.omit(x)))
               repapply <- function(foo) {

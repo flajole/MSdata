@@ -46,19 +46,19 @@ setMethod("DataScaling", "MSdata",
 
 # normalize to zero mean and unit variance
 AutoNorm <- function(x){
-    (x - mean(x))/sd(x, na.rm=T);
+    (x - mean(x, na.rm=T))/sd(x, na.rm=T);
 }
 
 # normalize to zero mean but varaince/SE
 ParetoNorm <- function(x){
-    (x - mean(x))/sqrt(sd(x, na.rm=T));
+    (x - mean(x, na.rm=T))/sqrt(sd(x, na.rm=T));
 }
 
 # normalize to zero mean but varaince/SE
 RangeNorm <- function(x){
-    if(max(x) == min(x)){
+    if(max(x, na.rm=T) == min(x, na.rm=T)){
         x;
     }else{
-        (x - mean(x))/(max(x)-min(x));
+        (x - mean(x, na.rm=T))/(max(x, na.rm=T)-min(x, na.rm=T));
     }
 }
