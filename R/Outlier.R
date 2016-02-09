@@ -107,6 +107,7 @@ setGeneric("msOutlierMulti",
 
 setMethod("msOutlierMulti", "MSdata",
           function(msdata, method = "pcdist", ...) {
+            require("rrcovHD")
               .intMatrix <- intMatrix(msdata)
               match.arg(method, c("mahdist", "pcdist", "pcout", "sign1", "sign2"))
               if (method == "mahdist") {
