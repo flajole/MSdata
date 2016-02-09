@@ -19,29 +19,30 @@ setMethod("SetRepGroup", "MSdata",
           function(msdata,
                    repFac = NULL,
                    impFac = NULL) {
-              .sampleData <- sampleData(msdata)
-              if (is.null(impFac)) {
-				impFac <- names(.sampleData)
-				impFac <- impFac[impFac != "ReplicationGroup"]
-			  }
-			  
-              if (!is.null(repFac)) {
-                  if (repFac %in% names(.sampleData)) {
-                     names(.sampleData)[names(.sampleData)==repFac] <- "ReplicationGroup"
-					 msg <- paste0(repFac, " column in sampleData is set as ReplicationGroup column")
-                  } else {
-                      stop("Stated replication factor is not found is sample data.")
-                  }
+            .sampleData <- sampleData(msdata)
+            if (is.null(impFac)) {
+              impFac <- names(.sampleData)
+              impFac <- impFac[impFac != "ReplicationGroup"]
+            }
+            
+            if (!is.null(repFac)) {
+              if (repFac %in% names(.sampleData)) {
+                names(.sampleData)[names(.sampleData)==repFac] <- "ReplicationGroup"
+                .sampleData[["ReplicationGroup"]] <- as.factor(.sampleData[["ReplicationGroup"]])
+                msg <- paste0(repFac, " column in sampleData is set as ReplicationGroup column")
               } else {
-                  .sampleData$ReplicationGroup <- RepGroup(.sampleData, impFac)
-				  msg <- "ReplicationGroup column is created in sampleData"
+                stop("Stated replication factor is not found is sample data.")
               }
-              sampleData(msdata) <- .sampleData
-			  processLog(msdata) <- msg
-			  cat(msg)
-              return(msdata)
+            } else {
+              .sampleData$ReplicationGroup <- RepGroup(.sampleData, impFac)
+              msg <- "ReplicationGroup column is created in sampleData"
+            }
+            sampleData(msdata) <- .sampleData
+            processLog(msdata) <- msg
+            cat(msg)
+            return(msdata)
           })
-		  
+
 RepGroup <- function(sampleData, impFac = names(sampleData)) {
     missFac <- setdiff(impFac, names(sampleData))
     if (length(missFac) != 0) {
