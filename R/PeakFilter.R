@@ -40,7 +40,7 @@ setMethod("msPeakFilter", "MSdata",
               msg <- character()
               .intMatrix <- intMatrix(msdata)
               se <- function(x) sqrt(var(x, na.rm = TRUE)/length(na.omit(x)))
-              repapply <- function(foo) {
+              rep.apply <- function(foo) {
                   apply(.intMatrix, 1, function(peak) tapply(peak, reps, foo, peak))
               }
               
@@ -69,22 +69,22 @@ setMethod("msPeakFilter", "MSdata",
                   
               } else {       
                   if (!is.null(above.blank) & !is.null(blanks)) {
-                      filt <- abind::abind(along = 3, filt, repapply(function(peakgr, peak) 
+                      filt <- abind::abind(along = 3, filt, rep.apply(function(peakgr, peak) 
                           mean(peakgr, na.rm = TRUE) - above.blank * se(peakgr) >
                               mean(blank.intMatrix, na.rm = TRUE) + above.blank * se(blank.intMatrix)))
                   }
                   # if (!is.null(fold.blank) & !is.null(blanks)) {
-                  # filt <- abind::abind(along = 3, filt, repapply(function(repGroup, peak)
+                  # filt <- abind::abind(along = 3, filt, rep.apply(function(repGroup, peak)
                   # TRUE))
                   # }
               }
               
               if (!is.null(min.int)) {
-                  filt <- abind::abind(along = 3, filt, repapply(function(peakgr, ...) mean(peakgr, na.rm = T) >= min.int))
+                  filt <- abind::abind(along = 3, filt, rep.apply(function(peakgr, ...) mean(peakgr, na.rm = T) >= min.int))
               }
               
               if (!is.null(min.nonNAnum.repgroup)) {
-                  filt <- abind::abind(along = 3, filt, repapply(function(peakgr, ...) sum(!is.na(peakgr)) >= min.nonNAnum.repgroup))
+                  filt <- abind::abind(along = 3, filt, rep.apply(function(peakgr, ...) sum(!is.na(peakgr)) >= min.nonNAnum.repgroup))
               }
               
               if (!is.null(min.nonNApercent)) {

@@ -46,12 +46,13 @@ setMethod("msNorm", "MSdata",
                   robust <- apply(logratios, 2, tukey.full)
                   robust <- apply(robust, 1, function(row) !any(is.na(row)))
                   robust <- logratios[robust, ]
+                  nrbst <- nrow(robust)
                   robust <- matrix(2^apply(robust, 2, mean),
                                    nrow=nrow(.intMatrix), 
                                    ncol=ncol(.intMatrix), 
                                    byrow=TRUE)
                   .intMatrix <- .intMatrix/robust
-                  msg <- paste0("Normalization by ",  , " robust peaks")
+                  msg <- paste0("Normalization by ",  nrbst, " robust peaks out of", npeak(msdata))
                   
               } else if (method == "refCompound") {
                   if (is.null(ref.cmpd)) 
