@@ -117,7 +117,7 @@ setMethod("msNoiseGen", "MSdata",
               
               notna <- repapply(msdata, function(group) sum(!is.na(group)))
               suppressWarnings(maxint <- repapply(msdata, max, na.rm=T))
-              repsize <- repapply(length, msdata)
+              repsize <- repapply(msdata, length)
               noise.mean <- median(.intMatrix[notna <= repsize%/%2], na.rm=T)
               noise.amp <- quantile(intMatrix[notna <= repsize%/%2], 0.95, na.rm=T)
               noise.se <- quantile(.intMatrix[(notna > repsize - repsize%/%2) & (maxint < noise.amp)], 0.95, na.rm=T)
