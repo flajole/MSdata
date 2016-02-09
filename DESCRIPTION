@@ -19,14 +19,14 @@ Imports:
 License: GPL-3
 LazyData: true
 Collate:
-    'MSdata_class.R'
-    'EvalMissVal.R'
     'MQI_to_MA.R'
+    'MSdata_class.R'
     'MSdata_to_MA.R'
     'MSoutput.R'
     'MSupload.R'
     'MZindexing.R'
     'Misc_functions.R'
+    'MissingValues.R'
     'Norm.R'
     'NormBiomass.R'
     'NormScaling.R'
