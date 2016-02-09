@@ -1,5 +1,5 @@
-setGeneric("EvalMissVal", 
-           function(msdata, ...) standardGeneric("EvalMissVal"))
+setGeneric("msFillNA", 
+           function(msdata, ...) standardGeneric("msFillNA"))
 		   
 #' Evaluate Missing Values
 #' 
@@ -15,10 +15,10 @@ setGeneric("EvalMissVal",
 #' }
 #' @param percent For \code{method = "min"}. Quotient of minimal value used to replace missing values.
 #' @include MSdata_class.R
-#' @name EvalMissVal
-#' @seealso \code{\link{NoiseGen}} 
+#' @name msFillNA
+#' @seealso \code{\link{msNoiseGen}} 
 #' @export
-setMethod("EvalMissVal", "MSdata",
+setMethod("msFillNA", "MSdata",
           function(msdata, 
 				   method = "min", 
 				   percent = 0.5) {
@@ -87,6 +87,9 @@ setMethod("EvalMissVal", "MSdata",
 
 
 
+setGeneric("msNoiseGen", 
+           function(msdata, ...) standardGeneric("msNoiseGen"))
+
 #' Noise Generator
 #' 
 #' Generates background signal in replicate groups completely filled with missing values (NAs).
@@ -100,15 +103,10 @@ setMethod("EvalMissVal", "MSdata",
 #' 
 #' @param msdata \code{\link{MSdata-class}}
 #' @include MSdata_class.R
-#' @name NoiseGen
-#' @seealso \code{\link{EvalMissVal}}
+#' @name msNoiseGen
+#' @seealso \code{\link{msFillNA}}
 #' @export
-
-
-setGeneric("NoiseGen", 
-           function(msdata, ...) standardGeneric("NoiseGen"))
-
-setMethod("NoiseGen", "MSdata",
+setMethod("msNoiseGen", "MSdata",
           function(msdata) {
               .intMatrix <- intMatrix(msdata)
               if (is.null(sampleData(msdata)$ReplicationGroup)) {
@@ -121,8 +119,8 @@ setMethod("NoiseGen", "MSdata",
               suppressWarnings(maxint <- repapply(msdata, max, na.rm=T))
               repsize <- repapply(length, msdata)
               noise.mean <- median(.intMatrix[notna <= repsize%/%2], na.rm=T)
-              uplim <- quantile(na.omit(.intMatrix[notna <= 2]), 0.95, na.rm=T)
-              noise.se <- quantile(.intMatrix[(notna > repsize - repsize%/%2) & (maxint < uplim)], 0.95, na.rm=T)
+              noise.amp <- quantile(intMatrix[notna <= repsize%/%2], 0.95, na.rm=T)
+              noise.se <- quantile(.intMatrix[(notna > repsize - repsize%/%2) & (maxint < noise.amp)], 0.95, na.rm=T)
               
               noise <- rnorm(sum(notna == 0), noise.mean, noise.se)
               while(any(noise < 0)) {
