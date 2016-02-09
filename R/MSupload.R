@@ -70,14 +70,14 @@ setMethod("MSupload", "character",
               
               if (sampleNames) {
                   rownames(.sampleData) <- .sampleData[ , 1]
-                  .sampleData <- .sampleData[ , -1]
+                  .sampleData <- .sampleData[-1]
               } else {
                   rownames(.sampleData) <- paste0("sample", 1:nrow(.sampleData));
               }
               
               if (peakNames) {
                   rownames(.peakData) <- .peakData[ , 1]         
-                  .peakData <- .peakData[ , -1]
+                  .peakData <- .peakData[-1]
               } else {
                   rownames(.peakData) <- paste0("peak",   1:nrow(.peakData))        
               }
