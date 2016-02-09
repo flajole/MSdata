@@ -22,4 +22,7 @@
 \description{
 Normalisation of intensities by the list of sample masses/volumes/etc.
 }
+\seealso{
+\code{\link{msNorm}}, \code{\link{msNormStandards}}, \code{\link{msNormScaling}}, \code{\link{msNormTransform}}
+}
 
