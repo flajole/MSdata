@@ -1,8 +1,8 @@
 ## Normalization by the list of standards written in file
 ## as table: name, mz, retention time
 
-setGeneric("StandNorm", 
-           function(msdata, ...) standardGeneric("StandNorm"))
+setGeneric("msNormStandard", 
+           function(msdata, ...) standardGeneric("msNormStandard"))
 
 
 #' Normalisation by standards
@@ -20,10 +20,11 @@ setGeneric("StandNorm",
 #' @param recalculateMean If \code{TRUE} then \code{meanInt} is not used, but is recalculated from these particular data.
 #' 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
-#' @name StandNorm
+#' @name msNormStandard
+#' @seealso \code{\link{msNorm}}, \code{\link{msNormBiomass}}, \code{\link{msScaling}}, \code{\link{msTransform}}
 #' @export 		   		   
 
-setMethod("StandNorm", "MSdata",
+setMethod("msNormStandard", "MSdata",
           function(msdata, 
 				   standards.list,
 				   mzwindow = 0.01,

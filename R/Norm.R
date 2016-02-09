@@ -1,5 +1,5 @@
-setGeneric("DataNorm", 
-           function(msdata, ...) standardGeneric("DataNorm"))
+setGeneric("msNorm", 
+           function(msdata, ...) standardGeneric("msNorm"))
 #' MSdata normalisation
 #'
 #' Sample-wise normalisation methods.
@@ -12,8 +12,10 @@ setGeneric("DataNorm",
 #' @param ref.cmpd For \code{"refCompound"} method, the name or the order number of reference compound.
 #' 
 #' @return \code{\link{MSdata-class}} object with normalised intensity matrix
+#' @name msNorm
+#' @seealso \code{\link{msNormStandard}}, \code{\link{msNormBiomass}}, \code{\link{msScaling}}, \code{\link{msTransform}}
 #' @export     	   	
-setMethod("DataNorm", "MSdata",
+setMethod("msNorm", "MSdata",
           function(msdata,
                    method,
                    ref.cmpd = NULL) {
@@ -39,22 +41,17 @@ setMethod("DataNorm", "MSdata",
                   msg <- "Data are normalised by sample sum" 
                   
               } else if (method == "robustPeaks") {
-                  reps <- sampleData(msdata)$ReplicationGroup
-                  tukeys <- .intMatrix
-                  tukeys[ , ] <- 0
-                  for (i in levels(reps)) {
-                      tukeys[, reps==i] <- apply(.intMatrix[, reps==i], 1, tukey)
-                  }
+                  tukeys <- repapply(msdata, tukey)
                   logratios <- log2(.intMatrix/tukeys)
                   robust <- apply(logratios, 2, tukey.full)
                   robust <- apply(robust, 1, function(row) !any(is.na(row)))
                   robust <- logratios[robust, ]
                   robust <- matrix(2^apply(robust, 2, mean),
-                                 nrow=nrow(.intMatrix), 
-                                 ncol=ncol(.intMatrix), 
-                                 byrow=TRUE)
+                                   nrow=nrow(.intMatrix), 
+                                   ncol=ncol(.intMatrix), 
+                                   byrow=TRUE)
                   .intMatrix <- .intMatrix/robust
-                  msg <- "Normalization by robust peaks"
+                  msg <- paste0("Normalization by ",  , " robust peaks")
                   
               } else if (method == "refCompound") {
                   if (is.null(ref.cmpd)) 

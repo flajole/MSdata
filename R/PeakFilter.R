@@ -1,5 +1,5 @@
-setGeneric("PeakFilter", 
-           function(msdata, ...) standardGeneric("PeakFilter"))
+setGeneric("msPeakFilter", 
+           function(msdata, ...) standardGeneric("msPeakFilter"))
 
 #' Peak filtering
 #' 
@@ -26,10 +26,10 @@ setGeneric("PeakFilter",
 #' @param min.nonNApercent Filter peaks with too many missing values. \code{min.nonNApercent} 
 #' is minimal allowed quotient of non-NA values for each peak.
 #' @return \code{\link{MSdata-class}} object without filtered peaks and blank samples
-#' @name PeakFilter
+#' @name msPeakFilter
 #' @export
 
-setMethod("PeakFilter", "MSdata",
+setMethod("msPeakFilter", "MSdata",
           function(msdata, 
                    blanks = NULL, 
                    above.blank = NULL,
@@ -118,8 +118,8 @@ setMethod("PeakFilter", "MSdata",
 
 
 
-setGeneric("BasicFilter", 
-           function(msdata, ...) standardGeneric("BasicFilter"))
+setGeneric("msPeakFilterMA", 
+           function(msdata, ...) standardGeneric("msPeakFilterMA"))
 		   
 #' Basic peak filtering
 #'
@@ -159,13 +159,11 @@ setGeneric("BasicFilter",
 #' \code{"nprsd"} - non-parametric relative standard deviation (MAD/median)\cr
 #' \code{"mean"} - mean intensity value\cr
 #' \code{"median"} - median intensity value
-#' none (less than 2000 features)
-#' the final variable should be less than 5000 for effective computing
 #' @return \code{\link{MSdata-class}} object without filtered peaks
-#' @name BasicFilter
+#' @name msPeakFilterMA
 #' @export
 
-setMethod("BasicFilter", "MSdata",
+setMethod("msPeakFilterMA", "MSdata",
           function(msdata,
                    method = "none"){
               

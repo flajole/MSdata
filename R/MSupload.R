@@ -2,11 +2,13 @@
 #' 
 #' Create a \code{\link{MSdata-class}} object from external data tables.
 #' Automatically adds a \code{ReplicationGroup} column in \code{sampleData} table according to group factors combinations.
+#' #' Remember that in file paths you should use either "/" or double "\", not just "\".
 #' @param object One of: 
 #' \enumerate{
 #' \item a character vector of length 1 - just a file path name of one .csv or .txt data frame.
 #' \item a list of paths to three files: matrix of intensities, sample metadata and peak metadata.
 #' }
+
 #' @param orientation Orientation of table, one of \code{"SamplesInCol"} or \code{"SamplesInRow"}
 #' @param zeros.as.NA If \code{TRUE} then zero intensities are treated as NAs.
 #' @return \code{\link{MSdata-class}} object
@@ -21,7 +23,7 @@ setGeneric("MSupload",
 #' If \code{FALSE}, standard names like \code{"sample1"} are created.
 #' @param peakNames If \code{TRUE}, sample names are taken from the first row/column of table. \cr
 #' If \code{FALSE}, standard names like \code{"peak1"} are created.
-#' @describeIn MSupload
+#' @describeIn MSupload Upload intensity matrix with several lines of peak and sample metadata.
 #' @export
 setMethod("MSupload", "character",
           function(object, 
@@ -98,7 +100,7 @@ setMethod("MSupload", "character",
           })
 
 
-#' @describeIn MSupload
+#' @describeIn MSupload Upload intensity matrix, sample data, peak data separately
 #' @export
 setMethod("MSupload", "list",
           function(object = list(intFile = "",

@@ -1,3 +1,10 @@
+#' Apply Functions Over Replicate Groups
+#' 
+#' Return a matrix of the same format as intensity matrix of \code{\link[MSdata]{MSdata}}
+#' object with values 
+#' @param msdata An object of \code{\link[MSdata]{MSdata}} class.
+#' @param fun The function to be applied.
+#' @export
 setGeneric("repapply", 
            function(msdata, ...) standardGeneric("repapply"))
 

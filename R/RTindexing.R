@@ -59,7 +59,7 @@ setMethod("RTindexing", "MSdata",
 			  return(msdata)
           })
 		  
-## Retention time indexing in xcmsSet data, with possibility to rewrite raw files
+## Retention time indexing in xcmsSet data, with opportunity to rewrite raw files
 
 # setMethod("RTindexing", "xcmsSet",
           # function(object, 

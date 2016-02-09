@@ -13,7 +13,9 @@ Imports:
     abind,
     pcaMethods,
     impute,
-    methods
+    methods,
+    rrcovHD,
+    vsn
 License: GPL-3
 LazyData: true
 Collate:
@@ -24,13 +26,16 @@ Collate:
     'MSoutput.R'
     'MSupload.R'
     'MZindexing.R'
+    'Misc_functions.R'
     'Norm.R'
-    'Norm_Biomass.R'
-    'Norm_Scaling.R'
+    'NormBiomass.R'
+    'NormScaling.R'
+    'NormTransform.R'
     'Norm_Standards.R'
-    'Norm_Transform.R'
+    'Outlier.R'
     'PQI_to_MA.R'
     'PeakFilter.R'
     'RT_MZ_rename.R'
     'RTindexing.R'
     'SetRepGroup.R'
+RoxygenNote: 5.0.1
